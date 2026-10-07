@@ -13,6 +13,10 @@
   "projects": [
     { "slug": "kiwi-boing", "title": "Kiwi Boing", "file": "project-kiwi-boing.html", "image": "../../kiwi-boing-site/assets/img/key-art.webp", "image_alt": "Kiwi Boing key art", "excerpt": "A kiwi that can’t fly, a plane in pieces: a 3D platformer across three islands packed with secrets." }
   ],
+  "jobs": [
+    { "slug": "game-level-designer", "title": "Game / Level Designer", "file": "jobs/game-level-designer.html", "excerpt": "Permanent contract · La Rochelle, on site or hybrid · 3+ years of experience · Design the mechanics and levels of our new 3D platformer." },
+    { "slug": "3d-artist", "title": "3D Artist", "file": "jobs/3d-artist.html", "excerpt": "Permanent contract · La Rochelle, on site or hybrid · 3+ years of experience · Shape the worlds of our new 3D platformer." }
+  ],
   "forms": [
     { "slug": "press-request", "title": "Press request", "file": "forms/press-request.html", "email_to": "press@aarise.games", "submit": "Send request", "confirmation": "Thank you. Your request has reached our press team, we will get back to you soon." },
     { "slug": "job-application", "title": "Job application", "file": "forms/job-application.html", "email_to": "jobs@aarise.games", "submit": "Send application", "confirmation": "Thank you for your application. We read every one of them and will get back to you." }

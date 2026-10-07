@@ -130,8 +130,12 @@ de couleurs ou de polices à choisir, seulement celles du site.
 - **Projets** (*Projects > Add project*) : titre, **Image mise en avant** (grand visuel, 16:9
   conseillé), **Extrait** (accroche, affichée en haut de la page et sur les cartes), puis le contenu.
   Le projet apparaît automatiquement sur l'accueil et la page Projects (le plus récent en premier).
-- **Offres d'emploi** : sur la page Jobs, insérer la composition **Job offer** (une par poste) à
-  la place de l'encadré « No open positions right now ».
+- **Offres d'emploi** (*Job offers > Add job offer*) : intitulé, **Extrait** (résumé affiché dans la
+  liste : contrat, lieu, expérience…), puis le contenu. **Publier** = en ligne (dans la liste de la page
+  Jobs, avec sa page et le formulaire de candidature, poste pré-rempli) ; **Passer en brouillon** =
+  retirée, sans la perdre. La colonne « On the site » de la liste indique l'état. Sans offre en ligne,
+  la page Jobs affiche « No open positions right now ». La candidature spontanée reste toujours en bas
+  de la page Jobs.
 - **Menus** (*Apparence > Menus*) : « Main menu » (en-tête) et « Legal links » (pied de page).
 - **Pied de page** : sur le site, connecté, menu **Edit site > Footer** de la barre du haut (ou
   *Apparence > Compositions > Site footer*). Colonnes logo/devise/LinkedIn, Contact, Studio, puis la

@@ -1552,6 +1552,82 @@ body.admin-bar .aa-header {
 	text-transform: uppercase;
 }
 
+
+/* ---------- Offres d'emploi (inc/jobs.php) : liste de la page Jobs ---------- */
+
+.aa-jobs .wp-block-post-template {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-top: 1px solid var(--aa-line);
+}
+
+.aa-jobs .wp-block-post {
+	position: relative;
+	margin: 0;
+	padding: 28px 48px 28px 0;
+	border-bottom: 1px solid var(--aa-line);
+	transition: background-color 0.4s var(--aa-ease);
+}
+
+.aa-jobs .wp-block-post::after {
+	content: "→";
+	position: absolute;
+	top: 32px;
+	right: 8px;
+	color: var(--aa-gold);
+	font-size: 1.4rem;
+	transition: transform 0.3s var(--aa-ease);
+}
+
+.aa-jobs .wp-block-post:hover::after {
+	transform: translateX(6px);
+}
+
+.aa-jobs .wp-block-post-title {
+	margin: 0 0 0.35em;
+	font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+}
+
+.aa-jobs .wp-block-post-title a {
+	text-decoration: none;
+}
+
+/* Toute la ligne est cliquable par le lien du titre. */
+.aa-jobs .wp-block-post-title a::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+.aa-jobs .wp-block-post:hover .wp-block-post-title a {
+	color: var(--aa-gold);
+}
+
+.aa-jobs .wp-block-post-excerpt {
+	margin: 0;
+	color: var(--aa-ash);
+}
+
+.aa-jobs .wp-block-post-excerpt__excerpt {
+	margin: 0;
+}
+
+.aa-jobs .wp-block-post-excerpt__more-text {
+	display: none;
+}
+
+.aa-jobs__spontaneous {
+	margin-top: 28px;
+	color: var(--aa-ash);
+}
+
+/* Page d'une offre : le bouton « Apply » du haut. */
+.aa-main--job .aa-project-hero__text .wp-block-buttons {
+	margin: 32px 0 0;
+}
+
 /* ---------- Page d'un projet ---------- */
 
 .aa-project-hero {

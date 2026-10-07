@@ -39,6 +39,15 @@
 		});
 	}
 
+	/* Page d'une offre d'emploi : le champ « Position » du formulaire est pré-rempli. */
+	var apply = document.querySelector('[data-aa-position]');
+	if (apply) {
+		var position = apply.querySelector('.srfm-slug-position input');
+		if (position && !position.value) {
+			position.value = apply.getAttribute('data-aa-position');
+		}
+	}
+
 	var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	/* Scènes (héros de l'accueil, hauts de page) : parallaxe des plans, poussière dorée. */

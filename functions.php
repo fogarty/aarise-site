@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.4.4' );
+define( 'AARISE_VERSION', '0.5.0' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -21,6 +21,7 @@ define( 'AARISE_DEFAULT_DESCRIPTION', 'AARISE is an independent video game studi
 
 require_once __DIR__ . '/inc/consent.php';
 require_once __DIR__ . '/inc/projects.php';
+require_once __DIR__ . '/inc/jobs.php';
 require_once __DIR__ . '/inc/scenes.php';
 require_once __DIR__ . '/inc/hero.php';
 require_once __DIR__ . '/inc/team.php';

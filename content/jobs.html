@@ -25,21 +25,30 @@
 <!-- /wp:column -->
 
 <!-- wp:column -->
-<div class="wp-block-column"><!-- wp:group {"className":"is-style-panel","layout":{"type":"default"}} -->
+<div class="wp-block-column"><!-- wp:query {"queryId":3,"query":{"perPage":20,"pages":0,"offset":0,"postType":"job","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"className":"aa-jobs"} -->
+<div class="wp-block-query aa-jobs"><!-- wp:post-template -->
+<!-- wp:post-title {"level":3,"isLink":true} /-->
+
+<!-- wp:post-excerpt {"moreText":"Read the offer","excerptLength":40} /-->
+<!-- /wp:post-template -->
+
+<!-- wp:query-no-results -->
+<!-- wp:group {"className":"is-style-panel","layout":{"type":"default"}} -->
 <div class="wp-block-group is-style-panel"><!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">No open positions right now</h3>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
 <p>We are not recruiting at the moment, but talent always finds its way. Send us a spontaneous application with the form below: we will keep it in mind for future projects.</p>
-<!-- /wp:paragraph -->
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- /wp:query-no-results --></div>
+<!-- /wp:query -->
 
-<!-- wp:buttons -->
-<div class="wp-block-buttons"><!-- wp:button {"className":"is-style-arrow"} -->
-<div class="wp-block-button is-style-arrow"><a class="wp-block-button__link wp-element-button" href="#apply">Spontaneous application</a></div>
-<!-- /wp:button --></div>
-<!-- /wp:buttons --></div>
-<!-- /wp:group --></div>
+<!-- wp:paragraph {"className":"aa-jobs__spontaneous"} -->
+<p class="aa-jobs__spontaneous">Don’t see your role? <a href="#apply">Send a spontaneous application</a>.</p>
+<!-- /wp:paragraph --></div>
+
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>
 <!-- /wp:group -->
@@ -110,7 +119,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:heading -->
-<h2 class="wp-block-heading">Send us your <em>application</em>.</h2>
+<h2 class="wp-block-heading">Spontaneous <em>application</em>.</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->

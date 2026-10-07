@@ -103,6 +103,14 @@ foreach ($project in $config.projects) {
 	'project  {0,-16} #{1}  {2}' -f $project.slug, $result.id, $result.link
 }
 
+foreach ($job in $config.jobs) {
+	if (-not (Wanted $job.slug)) { continue }
+	$body = @{ title = $job.title; slug = $job.slug; status = 'publish'; excerpt = $job.excerpt }
+	$id = Find 'job' $job.slug
+	$result = if ($id) { Wp POST "job/$id" $body $job.file } else { Wp POST 'job' $body $job.file }
+	'job      {0,-16} #{1}  {2}' -f $job.slug, $result.id, $result.link
+}
+
 foreach ($pattern in $config.synced_patterns) {
 	if (-not (Wanted $pattern.slug)) { continue }
 	$body = @{ title = $pattern.title; slug = $pattern.slug; status = 'publish' }
