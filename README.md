@@ -133,8 +133,24 @@ de couleurs ou de polices à choisir, seulement celles du site.
 - **Offres d'emploi** : sur la page Jobs, insérer la composition **Job offer** (une par poste) à
   la place de l'encadré « No open positions right now ».
 - **Menus** (*Apparence > Menus*) : « Main menu » (en-tête) et « Legal links » (pied de page).
-- **Pied de page** (*Apparence > Compositions > Site footer*) : logo, devise, contact, adresse.
-  On peut y ajouter un bloc « Icônes de réseaux sociaux ».
+- **Pied de page** : sur le site, connecté, menu **Edit site > Footer** de la barre du haut (ou
+  *Apparence > Compositions > Site footer*). Colonnes logo/devise/LinkedIn, Contact, Studio, puis la
+  ligne « With the support of ».
+- **Partenaires** : dans le pied de page, groupe de logos sous « With the support of » : bouton **+**
+  > Image, un bloc par partenaire (lien vers son site possible). Les logos sont affichés en blanc et
+  à la même hauteur ; fournir de préférence un logo blanc ou d'une seule couleur sur fond transparent
+  (PNG ou SVG). Un logo à détails internes (comme le lion de la Région) doit être fourni déjà en blanc.
+- **Équipe** (page About) : composition **Team** / **Team member**. Pour ajouter quelqu'un, dupliquer
+  un membre et changer nom et poste : son portrait-paysage est généré à partir du nom. Pour une vraie
+  photo, ajouter un bloc Image dans le membre.
+- **Hauts de page** : les sections **Page intro** reçoivent une scène animée selon la page (About :
+  relief, Projects : orbites, Jobs : horizon, Press kit : projecteurs, Contact : ondes). Pour en
+  changer, ajouter au groupe la classe `aa-scene-contours`, `-orbits`, `-horizon`, `-beams` ou
+  `-ripples` (panneau Avancé > Classe CSS). Sur l'accueil, une image ou vidéo mise dans le bloc
+  Couverture remplace la montagne.
+- **Formulaires** (*SureForms*) : Contact (vers contact@), Press request (press@), Job application
+  (jobs@, CV en PDF protégé). Réponses dans *SureForms > Entries*, destinataires dans les réglages
+  de chaque formulaire.
 - **Partage et référencement** : l'**Extrait** d'une page sert de description ; son **Image mise en
   avant**, d'image de partage (sinon la vignette du studio).
 
