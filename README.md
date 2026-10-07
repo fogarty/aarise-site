@@ -168,3 +168,20 @@ listé dans la page Cookie policy). Dans GTM, configurer la balise Google (GA4) 
 conteneur Kiwi Boing. Le choix du visiteur est aussi poussé dans le dataLayer (événement
 `aa_consent_update`). Sur le staging, GTM ne se charge qu.en mode Aperçu (adresse avec `?gtm_debug=`), pour ne pas
 mélanger ses visites aux statistiques.
+
+## Annoncer un projet à une date précise (embargo)
+
+Exemple en place : **Kiwi Boing**, planifié au **15 octobre 2026 00:00 PT** (09:00 à Paris, 07:00 UTC).
+
+- Le vrai projet est **planifié** (*Publier > Planifier*) : invisible partout (listes, API, sitemap,
+  recherche) jusqu'à l'heure dite, puis publié automatiquement par WordPress.
+- En attendant, un projet **teaser** (« Project 01 ») sans image (vignette générée) occupe la place.
+  Son champ personnalisé `aarise_reveals` contient l'ID du vrai projet : à la publication de
+  celui-ci, le teaser repasse en brouillon tout seul et son adresse redirige (301) vers le vrai
+  projet. Rien à faire le jour J.
+- Ne pas mentionner le jeu ailleurs avant l'annonce (press kit, mentions légales, pages).
+- Les médias ne sont pas listés publiquement par l'API, et les pages de pièces jointes redirigent
+  vers l'accueil : un visuel envoyé dans la médiathèque n'est pas repérable avant l'annonce.
+- `tools/push-content.ps1` respecte le statut planifié (`"status": "future"`, `"date_gmt"` en UTC).
+  **Après l'annonce**, retirer l'entrée `project-01` de `content/pages.json`, sinon une nouvelle
+  exécution republierait le teaser.
