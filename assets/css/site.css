@@ -1094,11 +1094,11 @@ body.admin-bar .aa-header {
 	animation: aa-spin 240s linear infinite;
 }
 
-.aa-scene .aa-contour {
+.aa-scene .aa-contours path {
 	stroke-opacity: 0.14;
 }
 
-.aa-scene .aa-contour--index {
+.aa-scene .aa-contours .ix {
 	stroke-opacity: 0.5;
 }
 
@@ -1505,7 +1505,7 @@ body.admin-bar .aa-header {
 	transition: transform 1.6s var(--aa-ease);
 }
 
-.aa-contour {
+.aa-contours path {
 	fill: none;
 	stroke: var(--aa-bone);
 	stroke-opacity: 0.16;
@@ -1513,7 +1513,7 @@ body.admin-bar .aa-header {
 	transition: stroke-opacity 0.8s var(--aa-ease);
 }
 
-.aa-contour--index {
+.aa-contours .ix {
 	stroke: var(--aa-gold);
 	stroke-opacity: 0.6;
 	stroke-width: 1.4;
@@ -1527,11 +1527,11 @@ body.admin-bar .aa-header {
 	transform: scale(1.06) rotate(-1.5deg);
 }
 
-.aa-member:hover .aa-contour {
+.aa-member:hover .aa-contours path {
 	stroke-opacity: 0.3;
 }
 
-.aa-member:hover .aa-contour--index {
+.aa-member:hover .aa-contours .ix {
 	stroke-opacity: 0.95;
 }
 

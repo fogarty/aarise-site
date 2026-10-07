@@ -42,7 +42,7 @@ add_filter( 'render_block_core/group', 'aarise_team_member_portrait', 10, 2 );
 function aarise_team_portrait_svg( $name ) {
 	$map = aarise_contour_map( $name, array( 400, 500 ), 21 );
 	return sprintf(
-		'<svg class="aa-member__portrait" viewBox="0 0 400 500" aria-hidden="true" focusable="false"><rect width="400" height="500" class="aa-member__ground"/><circle cx="%1$.1f" cy="%2$.1f" r="140" class="aa-member__glow"/><g class="aa-member__contours">%3$s</g><circle cx="%1$.1f" cy="%2$.1f" r="3" class="aa-member__summit"/></svg>',
+		'<svg class="aa-member__portrait" viewBox="0 0 400 500" aria-hidden="true" focusable="false"><rect width="400" height="500" class="aa-member__ground"/><circle cx="%1$.1f" cy="%2$.1f" r="140" class="aa-member__glow"/><g class="aa-member__contours aa-contours">%3$s</g><circle cx="%1$.1f" cy="%2$.1f" r="3" class="aa-member__summit"/></svg>',
 		$map['summit'][0],
 		$map['summit'][1],
 		$map['paths']

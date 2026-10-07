@@ -124,46 +124,37 @@ function aarise_contour_map( $seed, $frame, $step ) {
 		$cx     = $summit[0] + ( $ridge[0] - $summit[0] ) * $t * 0.55;
 		$cy     = $summit[1] + ( $ridge[1] - $summit[1] ) * $t * 0.55;
 		$points = array();
-		for ( $i = 0; $i < 64; $i++ ) {
-			$theta = $i / 64 * M_PI * 2;
+		for ( $i = 0; $i < 32; $i++ ) {
+			$theta = $i / 32 * M_PI * 2;
 			$r     = 1;
 			foreach ( $waves as $wave ) {
 				$r += $wave['a'] * ( 0.35 + $t ) * sin( $wave['f'] * $theta + $wave['p'] + $t * 1.3 );
 			}
 			$points[] = array( $cx + cos( $theta ) * $radius * $r, $cy + sin( $theta ) * $radius * $r * 0.86 );
 		}
-		$paths .= sprintf(
-			'<path class="%s" d="%s"/>',
-			0 === $k % 4 ? 'aa-contour aa-contour--index' : 'aa-contour',
-			aarise_closed_curve( $points )
-		);
+		// Une courbe sur quatre est une « courbe maîtresse », plus marquée (classe ix).
+		$paths .= sprintf( '<path%s d="%s"/>', 0 === $k % 4 ? ' class="ix"' : '', aarise_closed_curve( $points ) );
 	}
 	return array( 'paths' => $paths, 'summit' => $summit );
 }
 
 /**
- * Courbe fermée lissée (Catmull-Rom convertie en courbes de Bézier) passant par les points.
+ * Courbe fermée lissée passant près des points : courbes quadratiques reliant les milieux des
+ * segments, chaque point servant de point de contrôle. Coordonnées entières (tracé compact).
  *
  * @param array $p Points [x, y].
  * @return string Attribut d d'un tracé SVG.
  */
 function aarise_closed_curve( $p ) {
-	$n = count( $p );
-	$d = sprintf( 'M%.1f %.1f', $p[0][0], $p[0][1] );
+	$n   = count( $p );
+	$mid = function ( $a, $b ) {
+		return array( ( $a[0] + $b[0] ) / 2, ( $a[1] + $b[1] ) / 2 );
+	};
+	$start = $mid( $p[ $n - 1 ], $p[0] );
+	$d     = sprintf( 'M%d %d', round( $start[0] ), round( $start[1] ) );
 	for ( $i = 0; $i < $n; $i++ ) {
-		$p0 = $p[ ( $i - 1 + $n ) % $n ];
-		$p1 = $p[ $i ];
-		$p2 = $p[ ( $i + 1 ) % $n ];
-		$p3 = $p[ ( $i + 2 ) % $n ];
-		$d .= sprintf(
-			'C%.1f %.1f %.1f %.1f %.1f %.1f',
-			$p1[0] + ( $p2[0] - $p0[0] ) / 6,
-			$p1[1] + ( $p2[1] - $p0[1] ) / 6,
-			$p2[0] - ( $p3[0] - $p1[0] ) / 6,
-			$p2[1] - ( $p3[1] - $p1[1] ) / 6,
-			$p2[0],
-			$p2[1]
-		);
+		$m  = $mid( $p[ $i ], $p[ ( $i + 1 ) % $n ] );
+		$d .= sprintf( 'Q%d %d %d %d', round( $p[ $i ][0] ), round( $p[ $i ][1] ), round( $m[0] ), round( $m[1] ) );
 	}
 	return $d . 'Z';
 }
@@ -173,7 +164,7 @@ function aarise_closed_curve( $p ) {
 function aarise_scene_contours( $seed ) {
 	$map = aarise_contour_map( $seed . ' landscape', array( 900, 700 ), 34 );
 	return sprintf(
-		'<svg viewBox="0 0 900 700" preserveAspectRatio="xMidYMid slice"><circle cx="%1$.1f" cy="%2$.1f" r="260" class="aa-scene__glow"/><g class="aa-scene__spin">%3$s</g><circle cx="%1$.1f" cy="%2$.1f" r="4" class="aa-scene__dot"/></svg>',
+		'<svg viewBox="0 0 900 700" preserveAspectRatio="xMidYMid slice"><circle cx="%1$.1f" cy="%2$.1f" r="260" class="aa-scene__glow"/><g class="aa-scene__spin aa-contours">%3$s</g><circle cx="%1$.1f" cy="%2$.1f" r="4" class="aa-scene__dot"/></svg>',
 		$map['summit'][0],
 		$map['summit'][1],
 		$map['paths']

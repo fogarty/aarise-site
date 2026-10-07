@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.5.3' );
+define( 'AARISE_VERSION', '0.6.0' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -165,6 +165,57 @@ function aarise_enqueue_assets() {
 	wp_enqueue_script( 'aarise', $uri . '/assets/js/site.js', array(), AARISE_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
 }
 add_action( 'wp_enqueue_scripts', 'aarise_enqueue_assets', 20 );
+
+/**
+ * Images envoyées dans la médiathèque : les tailles intermédiaires (celles que le site affiche)
+ * sont générées en WebP, bien plus légères que le PNG ou le JPEG d'origine.
+ *
+ * @param array $formats Correspondances type d'origine => type produit.
+ * @return array
+ */
+function aarise_webp_subsizes( $formats ) {
+	$formats['image/png']  = 'image/webp';
+	$formats['image/jpeg'] = 'image/webp';
+	return $formats;
+}
+add_filter( 'image_editor_output_format', 'aarise_webp_subsizes' );
+
+/**
+ * Vignettes des listes de projets : chargées en différé (elles ne sont jamais tout en haut
+ * de la page) et à la bonne taille (une carte fait au plus ~60 % de la largeur de l'écran).
+ *
+ * @param string $content Rendu du bloc Image mise en avant.
+ * @return string
+ */
+function aarise_featured_image_loading( $content ) {
+	if ( is_admin() || is_singular( 'project' ) ) {
+		return $content;
+	}
+	$content = preg_replace( '/\s(fetchpriority|loading|sizes)="[^"]*"/', '', $content );
+	return str_replace( '<img ', '<img loading="lazy" sizes="(max-width: 900px) 100vw, 60vw" ', $content );
+}
+add_filter( 'render_block_core/post-featured-image', 'aarise_featured_image_loading' );
+
+/**
+ * Fichiers d'extensions inutiles sur ce site, retirés pour alléger les pages :
+ * - les polices Google d'Astra (le site héberge les siennes ; évite aussi d'envoyer
+ *   l'adresse IP des visiteurs à Google) ;
+ * - le script DOMPurify d'Astra Pro (fonctions non utilisées par nos gabarits) ;
+ * - les styles de SureForms Pro, sauf sur les pages qui contiennent un formulaire.
+ */
+function aarise_dequeue_unused_assets() {
+	wp_dequeue_style( 'astra-google-fonts' );
+	wp_dequeue_script( 'astra-dom-purify' );
+
+	$has_form = is_singular( 'job' ) || ( is_singular() && has_block( 'srfm/form', get_queried_object() ) );
+	if ( ! $has_form ) {
+		foreach ( array( 'sureforms-pro-signature', 'sureforms-pro-custom-styles' ) as $handle ) {
+			wp_dequeue_style( $handle );
+		}
+	}
+}
+add_action( 'wp_enqueue_scripts', 'aarise_dequeue_unused_assets', 999 );
+add_action( 'wp_print_styles', 'aarise_dequeue_unused_assets', 999 );
 
 /**
  * Précharge les polices principales (évite le changement de police au chargement).
