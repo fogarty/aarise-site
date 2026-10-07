@@ -31,3 +31,21 @@ body {
 	font-family: "Cormorant Garamond", Georgia, serif;
 	font-weight: 500;
 }
+
+/* Membre de l'équipe : le portrait-paysage est généré à l'affichage du site. */
+.aa-member::before {
+	content: "Portrait generated from the name";
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	aspect-ratio: 4 / 5;
+	margin-bottom: 18px;
+	border: 1px dashed rgba(236, 232, 223, 0.2);
+	color: #9b978e;
+	font-size: 12px;
+	text-align: center;
+}
+
+.aa-member:has(img)::before {
+	display: none;
+}

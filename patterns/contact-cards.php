@@ -3,27 +3,13 @@
  * Title: Contact cards
  * Slug: aarise/contact-cards
  * Categories: aarise
- * Description: Three ways to reach the studio, side by side.
+ * Description: Other ways to reach the studio: press, careers, social network.
  * Keywords: contact, email, press, jobs
  */
 ?>
-<!-- wp:group {"align":"full","className":"aa-section","layout":{"type":"default"}} -->
-<div class="wp-block-group alignfull aa-section"><!-- wp:columns {"className":"aa-contacts"} -->
+<!-- wp:group {"align":"full","className":"aa-section aa-section--tight","layout":{"type":"default"}} -->
+<div class="wp-block-group alignfull aa-section aa-section--tight"><!-- wp:columns {"className":"aa-contacts"} -->
 <div class="wp-block-columns aa-contacts"><!-- wp:column -->
-<div class="wp-block-column"><!-- wp:heading {"level":3} -->
-<h3 class="wp-block-heading">General</h3>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Partnerships, business and everything else.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><a href="mailto:contact@aarise.games">contact@aarise.games</a></p>
-<!-- /wp:paragraph --></div>
-<!-- /wp:column -->
-
-<!-- wp:column -->
 <div class="wp-block-column"><!-- wp:heading {"level":3} -->
 <h3 class="wp-block-heading">Press</h3>
 <!-- /wp:heading -->
@@ -33,7 +19,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><a href="mailto:press@aarise.games">press@aarise.games</a><br><a href="/press-kit/">Press kit</a></p>
+<p><a href="/press-kit/#press-request">Press request form</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column -->
 
@@ -47,7 +33,21 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><a href="mailto:jobs@aarise.games">jobs@aarise.games</a><br><a href="/jobs/">Open positions</a></p>
+<p><a href="/jobs/#apply">Apply</a></p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Follow us</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Studio news and behind the scenes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a href="https://www.linkedin.com/company/aarise-games" target="_blank" rel="noreferrer noopener">LinkedIn</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

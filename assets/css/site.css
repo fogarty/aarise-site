@@ -862,6 +862,121 @@ body.admin-bar .aa-header {
 	color: var(--aa-text);
 }
 
+
+/* ---------- Scène du héros (inc/hero.php) : le « A » en montagne dans la brume ---------- */
+
+.aa-scene {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	overflow: hidden;
+	pointer-events: none;
+}
+
+.aa-scene__layer {
+	position: absolute;
+	transform: translate3d(var(--aa-px, 0px), var(--aa-py, 0px), 0);
+	transition: transform 0.8s var(--aa-ease);
+	will-change: transform;
+}
+
+.aa-scene__far,
+.aa-scene__near {
+	inset: -4% -4% 0;
+	width: 108%;
+	height: 104%;
+}
+
+.aa-scene__peak {
+	right: 8vw;
+	bottom: 26%;
+	height: min(64vh, 660px);
+	aspect-ratio: 121 / 112;
+	filter: drop-shadow(0 0 60px rgba(205, 171, 91, 0.16));
+}
+
+.aa-scene__peak svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	animation: aa-peak-rise 3.2s var(--aa-ease) both;
+}
+
+@keyframes aa-peak-rise {
+	from {
+		opacity: 0;
+		transform: translateY(8%);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+.aa-scene__fog {
+	position: absolute;
+	left: -25%;
+	width: 150%;
+	background:
+		radial-gradient(40% 50% at 25% 55%, rgba(236, 232, 223, 0.07), transparent 70%),
+		radial-gradient(35% 45% at 70% 45%, rgba(236, 232, 223, 0.06), transparent 70%),
+		radial-gradient(30% 40% at 95% 60%, rgba(205, 171, 91, 0.05), transparent 70%);
+	filter: blur(12px);
+	animation: aa-fog 48s ease-in-out infinite alternate;
+}
+
+.aa-scene__fog--back {
+	bottom: 24%;
+	height: 34%;
+}
+
+.aa-scene__fog--front {
+	bottom: -6%;
+	height: 40%;
+	opacity: 0.9;
+	animation-duration: 64s;
+	animation-direction: alternate-reverse;
+}
+
+@keyframes aa-fog {
+	from {
+		transform: translate3d(-6%, 0, 0);
+	}
+
+	to {
+		transform: translate3d(6%, -3%, 0);
+	}
+}
+
+.aa-scene__dust {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+@media (max-width: 781px) {
+	.aa-scene__peak {
+		top: calc(var(--aa-header-h) + 16px);
+		right: calc(50% - min(40vh, 340px) * 121 / 112 / 2);
+		bottom: auto;
+		height: min(40vh, 340px);
+		opacity: 0.75;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.aa-scene__layer {
+		transition: none;
+	}
+
+	.aa-scene__peak svg,
+	.aa-scene__fog {
+		animation: none;
+	}
+}
+
 /* En-tête de page (pages de section : About, Jobs…) */
 .aa-intro {
 	padding-top: calc(var(--aa-header-h) + clamp(72px, 12vw, 160px));
@@ -1040,6 +1155,100 @@ body.admin-bar .aa-header {
 
 .aa-projects .wp-block-query-no-results p {
 	color: var(--aa-ash);
+}
+
+
+/* ---------- Équipe (inc/team.php) : portraits-paysages générés à partir du nom ---------- */
+
+.aa-team {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+	gap: clamp(32px, 4vw, 48px) clamp(20px, 2.5vw, 32px);
+}
+
+.aa-team > .wp-block-group__inner-container {
+	display: contents;
+}
+
+.wp-block-group.aa-member {
+	margin: 0;
+}
+
+.aa-member__portrait,
+.aa-member .wp-block-image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 5;
+	margin-bottom: 18px;
+	object-fit: cover;
+	background: var(--aa-ink);
+}
+
+.aa-member .wp-block-image {
+	margin: 0;
+}
+
+.aa-member__ground {
+	fill: var(--aa-ink);
+}
+
+.aa-member__glow {
+	fill: var(--aa-gold);
+	opacity: 0.07;
+	filter: blur(40px);
+}
+
+.aa-member__contours {
+	transform-origin: 50% 45%;
+	transition: transform 1.6s var(--aa-ease);
+}
+
+.aa-contour {
+	fill: none;
+	stroke: var(--aa-bone);
+	stroke-opacity: 0.16;
+	stroke-width: 1;
+	transition: stroke-opacity 0.8s var(--aa-ease);
+}
+
+.aa-contour--index {
+	stroke: var(--aa-gold);
+	stroke-opacity: 0.6;
+	stroke-width: 1.4;
+}
+
+.aa-member__summit {
+	fill: var(--aa-gold);
+}
+
+.aa-member:hover .aa-member__contours {
+	transform: scale(1.06) rotate(-1.5deg);
+}
+
+.aa-member:hover .aa-contour {
+	stroke-opacity: 0.3;
+}
+
+.aa-member:hover .aa-contour--index {
+	stroke-opacity: 0.95;
+}
+
+.aa-member h3,
+.aa-member .aa-member__name {
+	margin: 0 0 0.2em;
+	font-size: clamp(1.35rem, 1.8vw, 1.6rem);
+}
+
+.aa-member p,
+.aa-member .aa-member__role {
+	margin: 0;
+	color: var(--aa-ash);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.16em;
+	line-height: 1.5;
+	text-transform: uppercase;
 }
 
 /* ---------- Page d'un projet ---------- */

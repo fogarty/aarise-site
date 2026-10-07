@@ -21,9 +21,17 @@ $root = Split-Path $PSScriptRoot -Parent
 $contentDir = Join-Path $root 'content'
 $config = [IO.File]::ReadAllText((Join-Path $contentDir 'pages.json'), [Text.Encoding]::UTF8) | ConvertFrom-Json
 
-function Wp([string] $Method, [string] $Path, [hashtable] $Body = @{}, [string] $File, [string] $Upload) {
+# Identifiants des formulaires SureForms, par slug : {{FORM:slug}} dans un contenu devient l'ID.
+$formIds = @{}
+
+function Wp([string] $Method, [string] $Path, [hashtable] $Body = @{}, [string] $File, [string] $Upload, [hashtable] $Replace = @{}) {
 	$params = @{ Method = $Method; Path = $Path; Body = $Body; Site = $Site }
-	if ($File) { $params.ContentFile = Join-Path $contentDir $File }
+	if ($File) {
+		$text = [IO.File]::ReadAllText((Join-Path $contentDir $File), [Text.Encoding]::UTF8)
+		foreach ($key in $formIds.Keys) { $text = $text.Replace("{{FORM:$key}}", [string] $formIds[$key]) }
+		foreach ($key in $Replace.Keys) { $text = $text.Replace($key, [string] $Replace[$key]) }
+		$Body['content'] = $text
+	}
 	if ($Upload) { $params.UploadFile = $Upload }
 	& (Join-Path $PSScriptRoot 'wp.ps1') @params | ConvertFrom-Json
 }
@@ -33,6 +41,45 @@ function Wanted([string] $Slug) { -not $Only -or $Only -contains $Slug }
 function Find([string] $Type, [string] $Slug) {
 	$found = @(Wp GET "$Type`?slug=$Slug&status=publish,draft,private,pending&_fields=id")
 	if ($found.Count) { $found[0].id } else { $null }
+}
+
+# Style des formulaires SureForms : couleurs du site (le thème complète dans site.css).
+$formStyling = @{
+	primary_color = '#cdab5b'; text_color = '#ece8df'; text_color_on_primary = '#0c0c0e'
+	field_spacing = 'medium'; submit_button_alignment = 'left'; bg_type = 'color'; bg_color = 'transparent'
+}
+
+foreach ($form in $config.forms) {
+	$id = Find 'sureforms_form' $form.slug
+	if (-not $id) {
+		$id = (Wp POST 'sureforms_form' @{ title = $form.title; slug = $form.slug; status = 'publish' }).id
+	}
+	$formIds[$form.slug] = $id
+	if (-not (Wanted $form.slug)) { continue }
+	$meta = @{
+		_srfm_submit_button_text = $form.submit
+		_srfm_forms_styling      = $formStyling
+		_srfm_email_notification = @(@{
+			id = 1; status = $true; is_raw_format = $false; name = 'Admin Notification Email'
+			email_to = $form.email_to; email_reply_to = '{admin_email}'; from_name = '{site_title}'
+			from_email = 'contact@aarise.games'; email_cc = ''; email_bcc = ''
+			subject = 'New {form_title} - {site_title}'; email_body = '{all_data}'
+		})
+		_srfm_form_confirmation  = @(@{
+			id = 1; confirmation_type = 'same page'; page_url = ''; custom_url = ''
+			message = "<h3>Thank you</h3><p>$($form.confirmation)</p>"; submission_action = 'hide form'
+			enable_query_params = $false; query_params = @()
+		})
+	}
+	Wp POST "sureforms_form/$id" @{ title = $form.title; status = 'publish'; meta = $meta } $form.file -Replace @{ '{{FORM_ID}}' = $id } | Out-Null
+	'form     {0,-16} #{1}  -> {2}' -f $form.slug, $id, $form.email_to
+}
+
+if (-not $Only) {
+	foreach ($id in $config.forms_restyle) {
+		Wp POST "sureforms_form/$id" @{ meta = @{ _srfm_forms_styling = $formStyling } } | Out-Null
+		'form     {0,-16} #{1}  (style)' -f 'existing', $id
+	}
 }
 
 foreach ($page in $config.pages) {

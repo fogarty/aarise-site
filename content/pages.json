@@ -13,6 +13,11 @@
   "projects": [
     { "slug": "kiwi-boing", "title": "Kiwi Boing", "file": "project-kiwi-boing.html", "image": "../../kiwi-boing-site/assets/img/key-art.webp", "image_alt": "Kiwi Boing key art", "excerpt": "A kiwi that can’t fly, a plane in pieces: a 3D platformer across three islands packed with secrets." }
   ],
+  "forms": [
+    { "slug": "press-request", "title": "Press request", "file": "forms/press-request.html", "email_to": "press@aarise.games", "submit": "Send request", "confirmation": "Thank you. Your request has reached our press team, we will get back to you soon." },
+    { "slug": "job-application", "title": "Job application", "file": "forms/job-application.html", "email_to": "jobs@aarise.games", "submit": "Send application", "confirmation": "Thank you for your application. We read every one of them and will get back to you." }
+  ],
+  "forms_restyle": [1637],
   "synced_patterns": [
     { "slug": "site-footer", "title": "Site footer", "file": "site-footer.html" }
   ],

@@ -32,7 +32,7 @@
 
 <!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"className":"is-style-arrow"} -->
-<div class="wp-block-button is-style-arrow"><a class="wp-block-button__link wp-element-button" href="mailto:jobs@aarise.games?subject=Application">Apply</a></div>
+<div class="wp-block-button is-style-arrow"><a class="wp-block-button__link wp-element-button" href="#apply">Apply</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:group -->
