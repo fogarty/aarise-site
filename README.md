@@ -2,6 +2,10 @@
 
 Thème enfant d'**Astra** (Astra Pro) pour le site du studio, [www.aarise.games](https://www.aarise.games).
 
+- Site **en anglais uniquement** (pas de Polylang).
+- Devise du studio : **« The Art of Immersion »**. Ton visuel sobre et sérieux, plus que Kiwi Boing :
+  le studio fera différents types de jeux, le site ne doit pas épouser le style d'un seul.
+
 Ce dépôt **est** le dossier du thème : sur le serveur, il vit dans
 `public_html/wp-content/themes/aarise/` de l'application WordPress AARISE sur Cloudways
 (même serveur que Kiwi Boing, application distincte).
@@ -21,7 +25,8 @@ tools/wp.ps1         Accès à l'API REST WordPress
 
 ## 1. Mettre le dépôt sur GitHub
 
-1. Créer un dépôt **privé** vide sur GitHub : `fogarty/aarise-site`.
+1. Créer un dépôt **privé** vide sur GitHub : `fogarty/aarise-site`, **sans** README, .gitignore ni licence
+   (sinon son historique entre en conflit avec celui de ce dossier).
 2. Depuis ce dossier :
 
    ```bash
