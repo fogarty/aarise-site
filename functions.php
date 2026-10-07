@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.6.0' );
+define( 'AARISE_VERSION', '0.6.1' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -215,6 +215,29 @@ function aarise_dequeue_unused_assets() {
 	}
 }
 add_action( 'wp_enqueue_scripts', 'aarise_dequeue_unused_assets', 999 );
+
+/**
+ * Pas de préconnexion aux serveurs de Google Fonts (ajoutée par Astra) : le site n'en utilise pas.
+ *
+ * @param array  $urls          Adresses.
+ * @param string $relation_type Type de lien (preconnect, dns-prefetch…).
+ * @return array
+ */
+function aarise_remove_google_fonts_hints( $urls, $relation_type ) {
+	if ( 'preconnect' !== $relation_type && 'dns-prefetch' !== $relation_type ) {
+		return $urls;
+	}
+	return array_values(
+		array_filter(
+			$urls,
+			function ( $url ) {
+				$href = is_array( $url ) ? ( isset( $url['href'] ) ? $url['href'] : '' ) : $url;
+				return false === strpos( $href, 'fonts.googleapis.com' ) && false === strpos( $href, 'fonts.gstatic.com' );
+			}
+		)
+	);
+}
+add_filter( 'wp_resource_hints', 'aarise_remove_google_fonts_hints', 99, 2 );
 add_action( 'wp_print_styles', 'aarise_dequeue_unused_assets', 999 );
 
 /**
