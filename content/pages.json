@@ -11,7 +11,8 @@
     { "slug": "cookie-policy", "title": "Cookie policy", "file": "cookie-policy.html", "template": "", "excerpt": "" }
   ],
   "projects": [
-    { "slug": "kiwi-boing", "title": "Kiwi Boing", "file": "project-kiwi-boing.html", "image": "../../kiwi-boing-site/assets/img/key-art.webp", "image_alt": "Kiwi Boing key art", "excerpt": "A kiwi that can’t fly, a plane in pieces: a 3D platformer across three islands packed with secrets." }
+    { "slug": "project-01", "title": "Project 01", "file": "project-01.html", "excerpt": "A colourful 3D collectathon platformer. Reveal on October 15.", "reveals": "kiwi-boing" },
+    { "slug": "kiwi-boing", "title": "Kiwi Boing", "status": "future", "date_gmt": "2026-10-15T07:00:00", "file": "project-kiwi-boing.html", "image": "../../kiwi-boing-site/assets/img/key-art.webp", "image_alt": "Kiwi Boing key art", "excerpt": "A kiwi that can’t fly, a plane in pieces: a 3D platformer across three islands packed with secrets." }
   ],
   "jobs": [
     { "slug": "game-level-designer", "title": "Game / Level Designer", "file": "jobs/game-level-designer.html", "excerpt": "Permanent contract · La Rochelle, on site or hybrid · 3+ years of experience · Design the mechanics and levels of our new 3D platformer." },

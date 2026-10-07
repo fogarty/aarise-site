@@ -1473,6 +1473,18 @@ body.admin-bar .aa-header {
 	filter: saturate(1);
 }
 
+/* Vignette générée d'un projet sans image (projet pas encore annoncé). */
+.aa-project-placeholder {
+	display: block;
+	width: 100%;
+	height: 100%;
+	max-width: none;
+}
+
+.aa-projects .wp-block-post:hover .aa-project-placeholder .aa-contours {
+	transform: scale(1.04);
+}
+
 .aa-projects .wp-block-post-title {
 	margin-bottom: 0.4em;
 	font-size: clamp(1.75rem, 2.6vw, 2.25rem);

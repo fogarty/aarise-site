@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.7.0' );
+define( 'AARISE_VERSION', '0.7.1' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -609,7 +609,8 @@ function aarise_redirect_author_pages() {
 add_action( 'template_redirect', 'aarise_redirect_author_pages', 2 );
 
 /**
- * API REST : la liste des utilisateurs n'est visible que des personnes connectées.
+ * API REST : les utilisateurs et la médiathèque ne sont visibles que des personnes connectées
+ * (la liste des médias révélerait les visuels de projets pas encore annoncés).
  *
  * @param array $endpoints Routes de l'API.
  * @return array
@@ -617,7 +618,19 @@ add_action( 'template_redirect', 'aarise_redirect_author_pages', 2 );
 function aarise_hide_rest_users( $endpoints ) {
 	if ( ! is_user_logged_in() ) {
 		unset( $endpoints['/wp/v2/users'], $endpoints['/wp/v2/users/(?P<id>[\d]+)'] );
+		unset( $endpoints['/wp/v2/media'], $endpoints['/wp/v2/media/(?P<id>[\d]+)'] );
 	}
 	return $endpoints;
 }
 add_filter( 'rest_endpoints', 'aarise_hide_rest_users' );
+
+/**
+ * Pages de pièces jointes (/?attachment_id=…) : inutiles ici, redirigées vers l'accueil.
+ */
+function aarise_redirect_attachment_pages() {
+	if ( is_attachment() ) {
+		wp_safe_redirect( home_url( '/' ), 301, 'AARISE' );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'aarise_redirect_attachment_pages', 2 );

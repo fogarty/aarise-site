@@ -39,7 +39,7 @@ function Wp([string] $Method, [string] $Path, [hashtable] $Body = @{}, [string] 
 function Wanted([string] $Slug) { -not $Only -or $Only -contains $Slug }
 
 function Find([string] $Type, [string] $Slug) {
-	$found = @(Wp GET "$Type`?slug=$Slug&status=publish,draft,private,pending&_fields=id")
+	$found = @(Wp GET "$Type`?slug=$Slug&status=publish,future,draft,private,pending&_fields=id")
 	if ($found.Count) { $found[0].id } else { $null }
 }
 
@@ -89,7 +89,10 @@ foreach ($page in $config.pages) {
 
 foreach ($project in $config.projects) {
 	if (-not (Wanted $project.slug)) { continue }
-	$body = @{ title = $project.title; slug = $project.slug; status = 'publish'; excerpt = $project.excerpt }
+	# Statut : publié par défaut ; « future » + date_gmt (UTC) pour un projet planifié (annonce).
+	$status = if ($project.status) { $project.status } else { 'publish' }
+	$body = @{ title = $project.title; slug = $project.slug; status = $status; excerpt = $project.excerpt }
+	if ($project.date_gmt) { $body.date_gmt = $project.date_gmt }
 	$id = Find 'project' $project.slug
 	if (-not $id -and $project.image) {
 		$media = Wp POST 'media' -Upload (Join-Path $contentDir $project.image)
@@ -97,7 +100,18 @@ foreach ($project in $config.projects) {
 		$body.featured_media = $media.id
 	}
 	$result = if ($id) { Wp POST "project/$id" $body $project.file } else { Wp POST 'project' $body $project.file }
-	'project  {0,-16} #{1}  {2}' -f $project.slug, $result.id, $result.link
+	'project  {0,-16} #{1}  {2}  [{3}]' -f $project.slug, $result.id, $result.link, $result.status
+}
+
+# Teasers : « reveals » = slug du vrai projet ; le teaser disparaît quand celui-ci est publié.
+foreach ($project in $config.projects) {
+	if (-not $project.reveals -or -not (Wanted $project.slug)) { continue }
+	$teaserId = Find 'project' $project.slug
+	$targetId = Find 'project' $project.reveals
+	if ($teaserId -and $targetId) {
+		Wp POST "project/$teaserId" @{ meta = @{ aarise_reveals = [int] $targetId } } | Out-Null
+		'teaser   {0,-16} -> {1} (#{2})' -f $project.slug, $project.reveals, $targetId
+	}
 }
 
 foreach ($job in $config.jobs) {
