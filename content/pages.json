@@ -18,10 +18,10 @@
     { "slug": "3d-artist", "title": "3D Artist", "file": "jobs/3d-artist.html", "excerpt": "Permanent contract · La Rochelle, on site or hybrid · 3+ years of experience · Shape the worlds of our new 3D platformer." }
   ],
   "forms": [
+    { "slug": "contact-form", "title": "Contact form", "file": "forms/contact-form.html", "email_to": "contact@aarise.games", "submit": "Send message", "confirmation": "Thank you for your message. We will get back to you as soon as possible." },
     { "slug": "press-request", "title": "Press request", "file": "forms/press-request.html", "email_to": "press@aarise.games", "submit": "Send request", "confirmation": "Thank you. Your request has reached our press team, we will get back to you soon." },
     { "slug": "job-application", "title": "Job application", "file": "forms/job-application.html", "email_to": "jobs@aarise.games", "submit": "Send application", "confirmation": "Thank you for your application. We read every one of them and will get back to you." }
   ],
-  "forms_restyle": [1637],
   "synced_patterns": [
     { "slug": "site-footer", "title": "Site footer", "file": "site-footer.html" }
   ],

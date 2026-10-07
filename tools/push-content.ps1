@@ -75,12 +75,6 @@ foreach ($form in $config.forms) {
 	'form     {0,-16} #{1}  -> {2}' -f $form.slug, $id, $form.email_to
 }
 
-if (-not $Only) {
-	foreach ($id in $config.forms_restyle) {
-		Wp POST "sureforms_form/$id" @{ meta = @{ _srfm_forms_styling = $formStyling } } | Out-Null
-		'form     {0,-16} #{1}  (style)' -f 'existing', $id
-	}
-}
 
 foreach ($page in $config.pages) {
 	if (-not (Wanted $page.slug)) { continue }

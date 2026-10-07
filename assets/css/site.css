@@ -1815,21 +1815,64 @@ body.admin-bar .aa-header {
 
 /* ---------- Formulaires (SureForms) : aux couleurs du site ---------- */
 
-.srfm-form-container {
-	--srfm-color-input-background: rgba(236, 232, 223, 0.04);
-	--srfm-color-input-background-hover: rgba(236, 232, 223, 0.06);
-	--srfm-color-input-border: rgba(236, 232, 223, 0.18);
-	--srfm-color-input-border-hover: rgba(236, 232, 223, 0.4);
-	--srfm-color-input-border-focus-glow: rgba(205, 171, 91, 0.25);
+/* Les couleurs viennent du thème, quels que soient les réglages enregistrés dans SureForms :
+   « .aa-main » rend ces règles plus fortes que les variables que SureForms écrit pour chaque
+   formulaire (.srfm-form-container-<id>). */
+.aa-main .srfm-form-container {
+	--aa-form-text: 236 232 223;
+	--srfm-color-scheme-primary: var(--aa-gold);
+	--srfm-color-scheme-text-on-primary: var(--aa-night);
+	--srfm-color-scheme-text: var(--aa-bone);
+	--srfm-quill-editor-color: var(--aa-gold);
+	--srfm-bg-color: transparent;
 	--srfm-color-input-label: var(--aa-bone);
-	--srfm-color-input-text: var(--aa-bone);
 	--srfm-color-input-description: var(--aa-ash);
 	--srfm-color-input-placeholder: #6f6c66;
-	--srfm-dropdown-menu-border-color: rgba(236, 232, 223, 0.18);
+	--srfm-color-input-text: var(--aa-bone);
+	--srfm-color-input-prefix: var(--aa-ash);
+	--srfm-color-input-background: rgb(var(--aa-form-text) / 0.04);
+	--srfm-color-input-background-hover: rgb(var(--aa-form-text) / 0.06);
+	--srfm-color-input-background-disabled: rgb(var(--aa-form-text) / 0.02);
+	--srfm-color-input-border: rgb(var(--aa-form-text) / 0.18);
+	--srfm-color-input-border-disabled: rgb(var(--aa-form-text) / 0.08);
+	--srfm-color-input-border-hover: rgb(var(--aa-form-text) / 0.4);
+	--srfm-color-input-border-focus-glow: rgba(205, 171, 91, 0.25);
+	--srfm-color-input-selected: rgba(205, 171, 91, 0.12);
+	--srfm-color-multi-choice-svg: var(--aa-ash);
+	--srfm-btn-color-hover: var(--aa-gold);
+	--srfm-btn-color-disabled: rgb(var(--aa-form-text) / 0.2);
+	--srfm-dropdown-input-background-hover: rgb(var(--aa-form-text) / 0.06);
 	--srfm-dropdown-option-background-hover: rgba(205, 171, 91, 0.12);
 	--srfm-dropdown-option-background-selected: rgba(205, 171, 91, 0.2);
+	--srfm-dropdown-option-selected-icon: var(--aa-gold);
 	--srfm-dropdown-option-text-color: var(--aa-bone);
+	--srfm-dropdown-option-selected-text: var(--aa-bone);
+	--srfm-dropdown-badge-background: rgb(var(--aa-form-text) / 0.06);
+	--srfm-dropdown-badge-background-hover: rgb(var(--aa-form-text) / 0.1);
+	--srfm-dropdown-menu-border-color: rgb(var(--aa-form-text) / 0.18);
+	--srfm-dropdown-placeholder-color: #6f6c66;
+	--srfm-dropdown-icon-color: var(--aa-ash);
+	--srfm-dropdown-icon-disabled: rgb(var(--aa-form-text) / 0.2);
+	--srfm-form-padding-top: 0px;
+	--srfm-form-padding-right: 0px;
+	--srfm-form-padding-bottom: 0px;
+	--srfm-form-padding-left: 0px;
+	--srfm-form-border-radius-top: 0px;
+	--srfm-form-border-radius-right: 0px;
+	--srfm-form-border-radius-bottom: 0px;
+	--srfm-form-border-radius-left: 0px;
+	background: transparent;
 	font-family: var(--aa-sans);
+}
+
+/* Titres ajoutés dans le formulaire (bloc « Heading » de SureForms) : comme les titres du site. */
+.aa-main .srfm-form-container .srfm-advanced-heading-block,
+.aa-main .srfm-form-container [class*="srfm-advanced-heading"] h1,
+.aa-main .srfm-form-container [class*="srfm-advanced-heading"] h2,
+.aa-main .srfm-form-container [class*="srfm-advanced-heading"] h3 {
+	color: var(--aa-bone) !important;
+	font-family: var(--aa-serif);
+	font-weight: 500;
 }
 
 .srfm-form-container .srfm-form {
