@@ -144,4 +144,5 @@ Même système que Kiwi Boing (`inc/consent.php`) : rien n'est chargé avant le 
 (mode « basic »). Conteneur GTM : `GTM-N36SX5P4` (`AARISE_GTM_ID`), flux GA4 : `G-M2L60F8YNM` (cookie `_ga_M2L60F8YNM`,
 listé dans la page Cookie policy). Dans GTM, configurer la balise Google (GA4) comme dans le
 conteneur Kiwi Boing. Le choix du visiteur est aussi poussé dans le dataLayer (événement
-`aa_consent_update`).
+`aa_consent_update`). Sur le staging, GTM ne se charge qu.en mode Aperçu (adresse avec `?gtm_debug=`), pour ne pas
+mélanger ses visites aux statistiques.

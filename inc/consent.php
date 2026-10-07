@@ -76,11 +76,22 @@ function aarise_consent_head() {
 		'version' => AARISE_CONSENT_VERSION,
 		'cookie'  => 'aa_consent',
 		'maxAge'  => AARISE_CONSENT_MAX_AGE,
+		// Hors production (staging…), GTM ne se charge qu'en mode Aperçu de Tag Manager.
+		'preview' => ! aarise_is_production(),
 	);
 	?>
 	<script id="aa-consent-default">
 	(function () {
 		var cfg = <?php echo wp_json_encode( $config ); ?>;
+		if (cfg.preview) {
+			// L'Aperçu ouvre le site avec ?gtm_debug= ; on s'en souvient pour les pages suivantes de l'onglet.
+			try {
+				if (/[?&]gtm_debug=/.test(location.search)) { sessionStorage.setItem('aa_gtm_debug', '1'); }
+				if (!sessionStorage.getItem('aa_gtm_debug')) { cfg.gtm = ''; }
+			} catch (e) {
+				cfg.gtm = '';
+			}
+		}
 		window.dataLayer = window.dataLayer || [];
 		function gtag() { window.dataLayer.push(arguments); }
 		window.gtag = window.gtag || gtag;
