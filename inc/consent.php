@@ -160,14 +160,24 @@ function aarise_consent_head() {
 			var c = { v: cfg.version, analytics: !!choice.analytics, marketing: !!choice.marketing, ts: Date.now() };
 			document.cookie = cfg.cookie + '=' + encodeURIComponent(JSON.stringify(c)) +
 				'; Max-Age=' + cfg.maxAge + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
-			if (previous && ((previous.analytics && !c.analytics) || (previous.marketing && !c.marketing))) {
-				clearTrackers();
-			}
 			apply(c);
+			if (previous && ((previous.analytics && !c.analytics) || (previous.marketing && !c.marketing))) {
+				// Consentement retiré : les scripts Google déjà chargés pourraient réécrire leurs
+				// cookies tant que la page reste ouverte. On les efface et on recharge la page, qui
+				// repart sans GTM.
+				clearTrackers();
+				if (window.google_tag_manager) {
+					location.reload();
+				}
+			}
 			return c;
 		}
 
 		var stored = read();
+		// Sans accord, aucun cookie de mesure ne doit rester (anciens cookies, choix retiré…).
+		if (!stored || (!stored.analytics && !stored.marketing)) {
+			clearTrackers();
+		}
 		if (stored) {
 			apply(stored);
 		} else {
