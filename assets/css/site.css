@@ -64,7 +64,7 @@
 	--aa-gutter: clamp(20px, 5vw, 64px);
 	--aa-measure: 720px;
 	--aa-wide: 1240px;
-	--aa-header-h: 84px;
+	--aa-header-h: 96px;
 	--aa-section-space: clamp(88px, 12vw, 168px);
 	--aa-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -469,13 +469,13 @@ body.admin-bar .aa-header {
 }
 
 .aa-logo__mark {
-	width: 34px;
+	width: 48px;
 	height: auto;
 	color: var(--aa-bone);
 }
 
 .aa-logo__name {
-	font-size: 0.8125rem;
+	font-size: 1rem;
 	font-weight: 700;
 	letter-spacing: 0.34em;
 	line-height: 1;
@@ -977,6 +977,297 @@ body.admin-bar .aa-header {
 	}
 }
 
+
+/* ---------- Scènes des hauts de page (inc/scenes.php) ---------- */
+
+.aa-intro,
+.aa-page-hero,
+.aa-main--404,
+.aa-project-hero {
+	position: relative;
+	overflow: hidden;
+}
+
+.aa-intro {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	min-height: min(82vh, 820px);
+}
+
+.aa-intro > .wp-block-group__inner-container,
+.aa-page-hero > .aa-page-header,
+.aa-main--404 > .aa-404,
+.aa-project-hero__text {
+	position: relative;
+	z-index: 2;
+}
+
+/* La scène ne suit pas la colonne de contenu : elle occupe tout le haut de page. */
+.aa-section > .aa-scene,
+.aa-scene {
+	width: auto;
+	margin: 0;
+}
+
+.aa-page-hero {
+	min-height: min(56vh, 520px);
+	display: flex;
+	align-items: flex-end;
+	margin-bottom: clamp(40px, 6vw, 72px);
+}
+
+.aa-page-hero .aa-page-header {
+	margin-bottom: 0;
+	padding-bottom: 8px;
+}
+
+.aa-project-hero:not(.has-image) {
+	min-height: min(70vh, 720px);
+}
+
+/* Le dessin occupe la droite de la page, fondu vers le texte à gauche. */
+.aa-scene__art {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: min(68%, 1100px);
+	-webkit-mask-image: linear-gradient(to right, transparent, #000 35%);
+	mask-image: linear-gradient(to right, transparent, #000 35%);
+}
+
+.aa-scene__art svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	animation: aa-scene-in 2.4s var(--aa-ease) both;
+}
+
+@keyframes aa-scene-in {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.aa-scene--grid .aa-scene__art {
+	width: 100%;
+	-webkit-mask-image: none;
+	mask-image: none;
+}
+
+@media (max-width: 781px) {
+	.aa-scene__art {
+		width: 100%;
+		opacity: 0.55;
+		-webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent);
+		mask-image: linear-gradient(to bottom, #000 40%, transparent);
+	}
+}
+
+/* Éléments communs */
+.aa-scene__glow {
+	fill: var(--aa-gold);
+	opacity: 0.08;
+	filter: blur(60px);
+}
+
+.aa-scene__dot {
+	fill: var(--aa-gold);
+}
+
+.aa-scene__line {
+	stroke: var(--aa-bone);
+	stroke-opacity: 0.1;
+	stroke-width: 1;
+}
+
+/* Courbes de niveau : le relief tourne très lentement. */
+.aa-scene__spin {
+	transform-origin: 450px 350px;
+	animation: aa-spin 240s linear infinite;
+}
+
+.aa-scene .aa-contour {
+	stroke-opacity: 0.14;
+}
+
+.aa-scene .aa-contour--index {
+	stroke-opacity: 0.5;
+}
+
+@keyframes aa-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+/* Orbites */
+.aa-scene__orbit {
+	fill: none;
+	stroke: var(--aa-bone);
+	stroke-opacity: 0.14;
+}
+
+.aa-scene__star {
+	fill: var(--aa-gold);
+	filter: drop-shadow(0 0 18px rgba(205, 171, 91, 0.8));
+}
+
+.aa-scene__world {
+	fill: var(--aa-bone);
+	opacity: 0.7;
+}
+
+.aa-scene__world--gold {
+	fill: var(--aa-gold);
+	opacity: 1;
+	filter: drop-shadow(0 0 10px rgba(205, 171, 91, 0.7));
+}
+
+/* Horizon et soleil levant */
+.aa-scene__sun,
+.aa-scene__sun-core {
+	animation: aa-sunrise 5s var(--aa-ease) both;
+}
+
+.aa-scene__sun-core {
+	fill: var(--aa-gold);
+	opacity: 0.55;
+	filter: blur(6px);
+}
+
+@keyframes aa-sunrise {
+	from {
+		transform: translateY(160px);
+	}
+
+	to {
+		transform: none;
+	}
+}
+
+.aa-scene__horizon {
+	stroke: var(--aa-gold);
+	stroke-opacity: 0.6;
+}
+
+.aa-scene__ray {
+	stroke: var(--aa-gold);
+	stroke-opacity: 0.07;
+}
+
+.aa-scene__rays {
+	transform-origin: 520px 470px;
+	animation: aa-sway 30s ease-in-out infinite alternate;
+}
+
+@keyframes aa-sway {
+	from {
+		transform: rotate(-3deg);
+	}
+
+	to {
+		transform: rotate(3deg);
+	}
+}
+
+/* Projecteurs */
+.aa-scene__beam {
+	filter: blur(8px);
+	transform: rotate(var(--aa-angle));
+	animation: aa-beam 14s ease-in-out infinite alternate;
+	animation-delay: var(--aa-delay);
+}
+
+@keyframes aa-beam {
+	from {
+		transform: rotate(calc(var(--aa-angle) - 7deg));
+	}
+
+	to {
+		transform: rotate(calc(var(--aa-angle) + 7deg));
+	}
+}
+
+.aa-scene__stage {
+	fill: var(--aa-gold);
+	opacity: 0.12;
+	filter: blur(30px);
+}
+
+/* Ondes */
+.aa-scene__ring {
+	fill: none;
+	stroke: var(--aa-bone);
+	stroke-opacity: 0.08;
+}
+
+.aa-scene__wave {
+	fill: none;
+	stroke: var(--aa-gold);
+	stroke-width: 1.2;
+	transform-box: fill-box;
+	transform-origin: center;
+	animation: aa-wave 8s cubic-bezier(0.2, 0.6, 0.4, 1) infinite;
+	animation-delay: var(--aa-delay);
+}
+
+@keyframes aa-wave {
+	from {
+		opacity: 0.7;
+		transform: scale(0.02);
+	}
+
+	to {
+		opacity: 0;
+		transform: scale(1);
+	}
+}
+
+.aa-scene__pulse {
+	filter: drop-shadow(0 0 12px rgba(205, 171, 91, 0.9));
+}
+
+/* Grille en perspective : les lignes avancent vers l'horizon. */
+.aa-scene__row {
+	animation: aa-row 12s cubic-bezier(0.1, 0.5, 0.3, 1) infinite;
+	animation-delay: var(--aa-delay);
+}
+
+@keyframes aa-row {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	to {
+		opacity: 0;
+		transform: translateY(-440px);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.aa-scene__art svg,
+	.aa-scene__spin,
+	.aa-scene__sun,
+	.aa-scene__sun-core,
+	.aa-scene__rays,
+	.aa-scene__beam,
+	.aa-scene__wave,
+	.aa-scene__row {
+		animation: none;
+	}
+
+	.aa-scene__wave,
+	.aa-scene__row {
+		display: none;
+	}
+}
 /* En-tête de page (pages de section : About, Jobs…) */
 .aa-intro {
 	padding-top: calc(var(--aa-header-h) + clamp(72px, 12vw, 160px));
@@ -1341,9 +1632,21 @@ body.admin-bar .aa-header {
 	color: var(--aa-gold);
 }
 
+/* Les boutons gardent leurs couleurs dans les textes. */
+.aa-prose .wp-block-button__link,
+.aa-prose .wp-block-button__link:hover {
+	color: var(--aa-night);
+	text-decoration: none;
+}
+
+.aa-prose .wp-block-button.is-style-outline > .wp-block-button__link,
+.aa-prose .wp-block-button.is-style-arrow > .wp-block-button__link {
+	color: var(--aa-bone);
+}
+
 .aa-prose ul,
 .aa-prose ol {
-	margin: 0 0 1.5em;
+	margin-block: 0 1.5em;
 	padding-left: 1.25em;
 }
 
@@ -1659,25 +1962,59 @@ body.admin-bar .aa-header {
 	line-height: 0;
 }
 
-/* Logo de la Région : couleurs officielles, sur cartouche blanc. */
-.aa-partner {
+/* Ligne « With the support of » : libellé puis logos des partenaires. */
+.aa-footer__support {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 20px 48px;
+	padding-top: 40px;
+	border-top: 1px solid var(--aa-line);
+}
+
+.aa-footer__support > .wp-block-group__inner-container {
+	display: contents;
+}
+
+.aa-footer__support .is-style-eyebrow {
 	margin: 0;
 }
 
-.aa-partner a {
-	display: inline-block;
-	padding: 6px 10px;
-	background: #fff;
-	line-height: 0;
-	transition: opacity 0.2s;
+.aa-footer__main > .wp-block-columns + .wp-block-group {
+	margin-top: 8px;
 }
 
-.aa-partner a:hover {
-	opacity: 0.85;
+/* Partenaires (groupe « aa-partners » du pied de page) : un bloc Image par logo. Les logos
+   sont affichés en blanc, à hauteur égale. Idéalement un logo blanc ou d'une seule couleur,
+   sur fond transparent (PNG ou SVG). */
+.aa-partners {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 20px 32px;
 }
 
-.aa-partner img {
-	width: 160px;
+.aa-partners > .wp-block-group__inner-container {
+	display: contents;
+}
+
+.aa-partners .wp-block-image {
+	margin: 0;
+}
+
+.aa-partners img {
+	display: block;
+	width: auto;
+	max-width: 180px;
+	height: 56px;
+	object-fit: contain;
+	filter: brightness(0) invert(1);
+	opacity: 0.8;
+	transition: opacity 0.3s;
+}
+
+.aa-partners a:hover img {
+	opacity: 1;
 }
 
 .aa-footer__bar {

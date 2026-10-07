@@ -41,10 +41,19 @@
 
 	var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	/* Scène du héros : parallaxe des plans (souris et défilement), poussière dorée. */
-	var scene = document.querySelector('[data-aa-scene]');
-	if (scene && !reducedMotion) {
-		var layers = scene.querySelectorAll('[data-depth]');
+	/* Scènes (héros de l'accueil, hauts de page) : parallaxe des plans, poussière dorée. */
+	var scenes = document.querySelectorAll('[data-aa-scene]');
+	if (reducedMotion) {
+		// Arrête aussi les animations SVG (orbites).
+		scenes.forEach(function (scene) {
+			scene.querySelectorAll('svg').forEach(function (svg) {
+				if (svg.pauseAnimations) {
+					svg.pauseAnimations();
+				}
+			});
+		});
+	} else if (scenes.length) {
+		var layers = document.querySelectorAll('[data-aa-scene] [data-depth]');
 		var pointer = { x: 0, y: 0 };
 		var frame = 0;
 		var render = function () {
@@ -69,69 +78,75 @@
 			}, { passive: true });
 		}
 		window.addEventListener('scroll', queue, { passive: true });
+		scenes.forEach(startDust);
+	}
 
+	/**
+	 * Poussière dorée qui s'élève dans une scène ; en pause quand la scène n'est pas à l'écran.
+	 */
+	function startDust(scene) {
 		var canvas = scene.querySelector('[data-aa-dust]');
 		var ctx = canvas && canvas.getContext('2d');
-		if (ctx) {
-			var motes = [];
-			var visible = true;
-			var resize = function () {
-				var ratio = Math.min(window.devicePixelRatio || 1, 2);
-				canvas.width = canvas.offsetWidth * ratio;
-				canvas.height = canvas.offsetHeight * ratio;
-				ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-				var count = Math.round(canvas.offsetWidth / 22);
-				motes = [];
-				for (var i = 0; i < count; i++) {
-					motes.push({
-						x: Math.random() * canvas.offsetWidth,
-						y: Math.random() * canvas.offsetHeight,
-						r: Math.random() * 1.4 + 0.3,
-						speed: Math.random() * 0.25 + 0.06,
-						drift: Math.random() * Math.PI * 2,
-						alpha: Math.random() * 0.5 + 0.15
-					});
-				}
-			};
-			var tick = function () {
-				if (!visible) {
-					return;
-				}
-				var w = canvas.offsetWidth;
-				var h = canvas.offsetHeight;
-				ctx.clearRect(0, 0, w, h);
-				motes.forEach(function (m) {
-					m.y -= m.speed;
-					m.drift += 0.004;
-					m.x += Math.sin(m.drift) * 0.15;
-					if (m.y < -4) {
-						m.y = h + 4;
-						m.x = Math.random() * w;
-					}
-					// Plus lumineuses en montant, s'éteignent près du haut.
-					var fade = Math.min(1, m.y / (h * 0.35));
-					ctx.globalAlpha = m.alpha * fade;
-					ctx.fillStyle = '#cdab5b';
-					ctx.beginPath();
-					ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
-					ctx.fill();
-				});
-				window.requestAnimationFrame(tick);
-			};
-			resize();
-			window.addEventListener('resize', resize);
-			// Pause quand le héros n'est plus à l'écran.
-			if ('IntersectionObserver' in window) {
-				new IntersectionObserver(function (entries) {
-					var wasVisible = visible;
-					visible = entries[0].isIntersecting;
-					if (visible && !wasVisible) {
-						tick();
-					}
-				}).observe(scene);
-			}
-			tick();
+		if (!ctx) {
+			return;
 		}
+		var motes = [];
+		var visible = true;
+		var resize = function () {
+			var ratio = Math.min(window.devicePixelRatio || 1, 2);
+			canvas.width = canvas.offsetWidth * ratio;
+			canvas.height = canvas.offsetHeight * ratio;
+			ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+			var count = Math.round(canvas.offsetWidth / 22);
+			motes = [];
+			for (var i = 0; i < count; i++) {
+				motes.push({
+					x: Math.random() * canvas.offsetWidth,
+					y: Math.random() * canvas.offsetHeight,
+					r: Math.random() * 1.4 + 0.3,
+					speed: Math.random() * 0.25 + 0.06,
+					drift: Math.random() * Math.PI * 2,
+					alpha: Math.random() * 0.5 + 0.15
+				});
+			}
+		};
+		var tick = function () {
+			if (!visible) {
+				return;
+			}
+			var w = canvas.offsetWidth;
+			var h = canvas.offsetHeight;
+			ctx.clearRect(0, 0, w, h);
+			motes.forEach(function (m) {
+				m.y -= m.speed;
+				m.drift += 0.004;
+				m.x += Math.sin(m.drift) * 0.15;
+				if (m.y < -4) {
+					m.y = h + 4;
+					m.x = Math.random() * w;
+				}
+				// Plus lumineuses en montant, s'éteignent près du haut.
+				var fade = Math.min(1, m.y / (h * 0.35));
+				ctx.globalAlpha = m.alpha * fade;
+				ctx.fillStyle = '#cdab5b';
+				ctx.beginPath();
+				ctx.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+				ctx.fill();
+			});
+			window.requestAnimationFrame(tick);
+		};
+		resize();
+		window.addEventListener('resize', resize);
+		if ('IntersectionObserver' in window) {
+			new IntersectionObserver(function (entries) {
+				var wasVisible = visible;
+				visible = entries[0].isIntersecting;
+				if (visible && !wasVisible) {
+					tick();
+				}
+			}).observe(scene);
+		}
+		tick();
 	}
 
 	/* Apparition douce des éléments des sections au défilement. */
@@ -153,7 +168,7 @@
 	selectors.forEach(function (selector) {
 		try {
 			document.querySelectorAll(selector).forEach(function (el) {
-				if (items.indexOf(el) === -1) {
+				if (items.indexOf(el) === -1 && !el.classList.contains('aa-scene')) {
 					items.push(el);
 				}
 			});

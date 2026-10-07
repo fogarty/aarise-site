@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.3.1' );
+define( 'AARISE_VERSION', '0.4.0' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -21,6 +21,7 @@ define( 'AARISE_DEFAULT_DESCRIPTION', 'AARISE is an independent video game studi
 
 require_once __DIR__ . '/inc/consent.php';
 require_once __DIR__ . '/inc/projects.php';
+require_once __DIR__ . '/inc/scenes.php';
 require_once __DIR__ . '/inc/hero.php';
 require_once __DIR__ . '/inc/team.php';
 
@@ -404,3 +405,49 @@ function aarise_synced_pattern( $slug ) {
 	}
 	return do_blocks( $pattern->post_content );
 }
+
+/**
+ * Barre d'administration (en haut du site, connecté) : accès direct au pied de page et aux menus.
+ *
+ * @param WP_Admin_Bar $bar Barre d'administration.
+ */
+function aarise_admin_bar_shortcuts( $bar ) {
+	if ( is_admin() || ! current_user_can( 'edit_theme_options' ) ) {
+		return;
+	}
+	$bar->add_node(
+		array(
+			'id'    => 'aarise-site',
+			'title' => 'Edit site',
+			'href'  => admin_url( 'edit.php?post_type=wp_block' ),
+		)
+	);
+	$footer = get_page_by_path( 'site-footer', OBJECT, 'wp_block' );
+	if ( $footer ) {
+		$bar->add_node(
+			array(
+				'parent' => 'aarise-site',
+				'id'     => 'aarise-footer',
+				'title'  => 'Footer (contact, studio, partners)',
+				'href'   => get_edit_post_link( $footer->ID, 'raw' ),
+			)
+		);
+	}
+	$bar->add_node(
+		array(
+			'parent' => 'aarise-site',
+			'id'     => 'aarise-menus',
+			'title'  => 'Menus (header, legal links)',
+			'href'   => admin_url( 'nav-menus.php' ),
+		)
+	);
+	$bar->add_node(
+		array(
+			'parent' => 'aarise-site',
+			'id'     => 'aarise-projects',
+			'title'  => 'Projects',
+			'href'   => admin_url( 'edit.php?post_type=project' ),
+		)
+	);
+}
+add_action( 'admin_bar_menu', 'aarise_admin_bar_shortcuts', 80 );

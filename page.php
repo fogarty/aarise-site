@@ -17,9 +17,12 @@ get_header();
 	while ( have_posts() ) :
 		the_post();
 		?>
-		<header class="aa-page-header">
-			<h1 class="aa-page-header__title"><?php the_title(); ?></h1>
-		</header>
+		<div class="aa-page-hero">
+			<?php echo aarise_scene( 'grid', get_the_title() ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG décoratif du thème. ?>
+			<header class="aa-page-header">
+				<h1 class="aa-page-header__title"><?php the_title(); ?></h1>
+			</header>
+		</div>
 		<div class="aa-content aa-prose">
 			<?php the_content(); ?>
 		</div>

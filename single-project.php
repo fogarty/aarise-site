@@ -18,6 +18,8 @@ get_header();
 		<header class="aa-project-hero<?php echo has_post_thumbnail() ? ' has-image' : ''; ?>">
 			<?php if ( has_post_thumbnail() ) : ?>
 				<?php the_post_thumbnail( 'full', array( 'class' => 'aa-project-hero__image', 'loading' => 'eager', 'fetchpriority' => 'high', 'sizes' => '100vw', 'alt' => '' ) ); ?>
+			<?php else : ?>
+				<?php echo aarise_scene( 'contours', get_the_title() ); // phpcs:ignore WordPress.Security.EscapeOutput -- SVG décoratif du thème. ?>
 			<?php endif; ?>
 			<div class="aa-project-hero__text">
 				<p class="is-style-eyebrow"><a href="<?php echo esc_url( home_url( '/projects/' ) ); ?>">Projects</a></p>
