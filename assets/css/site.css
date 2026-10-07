@@ -433,7 +433,27 @@ ul.is-style-facts {
 .aa-nav-open .aa-header {
 	border-bottom-color: var(--aa-line);
 	background: rgba(12, 12, 14, 0.88);
+}
+
+/* Le flou est sur un calque à part : posé sur l'en-tête lui-même, il enfermerait le menu
+   mobile (position fixe) dans la hauteur de l'en-tête. */
+.aa-header::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	opacity: 0;
 	backdrop-filter: blur(14px);
+	-webkit-backdrop-filter: blur(14px);
+	transition: opacity 0.4s var(--aa-ease);
+}
+
+.aa-header.is-scrolled::before {
+	opacity: 1;
+}
+
+.aa-nav-open .aa-header {
+	background: var(--aa-night);
 }
 
 body.admin-bar .aa-header {
