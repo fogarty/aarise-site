@@ -488,17 +488,19 @@ body.admin-bar .aa-header {
 	color: var(--aa-bone);
 }
 
-.aa-logo__mark {
-	width: 48px;
-	height: auto;
+/* Logo officiel horizontal (symbole + nom). */
+.aa-logo__svg {
+	display: block;
+	width: auto;
+	height: 38px;
+	max-width: none;
 	color: var(--aa-bone);
 }
 
-.aa-logo__name {
-	font-size: 1rem;
-	font-weight: 700;
-	letter-spacing: 0.34em;
-	line-height: 1;
+@media (max-width: 600px) {
+	.aa-logo__svg {
+		height: 32px;
+	}
 }
 
 .aa-menu {
