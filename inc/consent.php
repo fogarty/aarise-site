@@ -160,6 +160,12 @@ function aarise_consent_head() {
 			var c = { v: cfg.version, analytics: !!choice.analytics, marketing: !!choice.marketing, ts: Date.now() };
 			document.cookie = cfg.cookie + '=' + encodeURIComponent(JSON.stringify(c)) +
 				'; Max-Age=' + cfg.maxAge + '; Path=/; SameSite=Lax' + (location.protocol === 'https:' ? '; Secure' : '');
+			// Accord donné après un refus enregistré : GTM a déjà vu ce refus sur cette page et n'y
+			// déclencherait pas la mesure ; on recharge pour repartir avec le nouvel accord.
+			if (previous && !previous.analytics && !previous.marketing && (c.analytics || c.marketing)) {
+				location.reload();
+				return c;
+			}
 			apply(c);
 			if (previous && ((previous.analytics && !c.analytics) || (previous.marketing && !c.marketing))) {
 				// Consentement retiré : les scripts Google déjà chargés pourraient réécrire leurs
