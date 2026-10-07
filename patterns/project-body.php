@@ -4,16 +4,12 @@
  * Slug: aarise/project-body
  * Categories: aarise
  * Post Types: project
- * Description: Starting content of a project page: presentation, key facts, links.
+ * Description: Starting content of a project page (the tagline shown at the top is the Excerpt): presentation, key facts, links.
  * Keywords: project, game, facts
  */
 ?>
 <!-- wp:paragraph {"className":"is-style-lead"} -->
-<p class="is-style-lead">What the game is about, in one or two sentences.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>A longer presentation of the game: its world, how it plays, what makes it special.</p>
+<p class="is-style-lead">A presentation of the game: its world, how it plays, what makes it special.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:list {"className":"is-style-facts"} -->

@@ -11,14 +11,23 @@ Ce dépôt **est** le dossier du thème : sur le serveur, il vit dans
 (même serveur que Kiwi Boing, application distincte).
 
 ```
-style.css            En-tête du thème enfant (Template: astra)
-functions.php        Chargement des styles, traductions, catégorie de compositions
-assets/css/          Styles du site
-assets/img/          Images du thème (logo, décors…)
-content/             Contenu des pages (balisage de blocs) envoyé via l'API REST
-languages/           Fichiers de traduction .po/.mo du thème
-tools/wp.ps1         Accès à l'API REST WordPress
-.github/workflows/   Déploiement automatique vers Cloudways
+style.css              En-tête du thème enfant (Template: astra)
+functions.php          Réglages, styles, menus, partage, redirections, noindex hors production
+inc/consent.php        Bandeau cookies, Google Consent Mode v2, chargement de GTM
+inc/projects.php       Type de contenu « Project » (menu Projects de l'administration)
+header.php, footer.php En-tête et pied de page du site (remplacent ceux d'Astra)
+page.php               Page simple : titre + contenu (pages légales…)
+templates/canvas.php   Modèle « Designed page (no title) » : pages composées de sections
+single-project.php     Page d'un projet : grand visuel, titre, accroche, contenu
+index.php, 404.php     Secours (tout autre contenu) et page introuvable
+patterns/              Compositions « AARISE » de l'éditeur (héros, sections, projets, offre d'emploi…)
+assets/css/            site.css (design), editor.css (éditeur), consent.css (bandeau)
+assets/js/             site.js (menu mobile, en-tête, apparitions), consent.js (bandeau)
+assets/fonts/          Inter et Cormorant Garamond, hébergées avec le thème (licence OFL)
+assets/img/            Logos, symbole « A », icônes, vignette de partage (og-image.jpg)
+content/               Contenu initial des pages (blocs) + pages.json ; installé par tools/push-content.ps1
+tools/wp.ps1           Accès à l'API REST WordPress (staging par défaut)
+.github/workflows/     Déploiement automatique vers Cloudways
 ```
 
 ---
@@ -103,3 +112,37 @@ copie Git de la production soit de nouveau alignée sur `main`.
 Modifier les fichiers, commit, push sur `main` → déployé. Les changements de CSS sont mis en cache
 par Breeze/Varnish : incrémenter `AARISE_VERSION` dans `functions.php` (et `Version` dans
 `style.css`) — le cache est alors vidé automatiquement au premier chargement.
+
+## Modifier le site (guide pour l'équipe)
+
+Tout le contenu se modifie dans WordPress, sans code. Le thème garantit le style : il n'y a pas
+de couleurs ou de polices à choisir, seulement celles du site.
+
+- **Pages** (*Pages*) : Home, About, Projects, Jobs, Press kit, Contact utilisent le modèle
+  « Designed page (no title) » (panneau de droite > Modèle) et sont faites de sections. Pour ajouter
+  une section : bouton **+** > **Compositions** > catégorie **AARISE** (Hero, Page intro,
+  Heading + text, Three pillars, Projects grid, Call to action, Contact cards, Job offer).
+  Les pages légales utilisent le modèle par défaut (le titre est affiché automatiquement).
+- **Styles de blocs** (panneau de droite > Styles) : *Eyebrow* (petit titre doré), *Lead* (texte
+  d'introduction), *Display* (très grand titre), *Panel* (encadré), *Facts* (liste « libellé —
+  valeur », libellé en gras), *Text + arrow* (bouton discret). Un mot en *italique* dans un titre
+  passe en doré.
+- **Projets** (*Projects > Add project*) : titre, **Image mise en avant** (grand visuel, 16:9
+  conseillé), **Extrait** (accroche, affichée en haut de la page et sur les cartes), puis le contenu.
+  Le projet apparaît automatiquement sur l'accueil et la page Projects (le plus récent en premier).
+- **Offres d'emploi** : sur la page Jobs, insérer la composition **Job offer** (une par poste) à
+  la place de l'encadré « No open positions right now ».
+- **Menus** (*Apparence > Menus*) : « Main menu » (en-tête) et « Legal links » (pied de page).
+- **Pied de page** (*Apparence > Compositions > Site footer*) : logo, devise, contact, adresse.
+  On peut y ajouter un bloc « Icônes de réseaux sociaux ».
+- **Partage et référencement** : l'**Extrait** d'une page sert de description ; son **Image mise en
+  avant**, d'image de partage (sinon la vignette du studio).
+
+## Cookies, GTM, GA4
+
+Même système que Kiwi Boing (`inc/consent.php`) : rien n'est chargé avant le consentement
+(mode « basic »). Pour activer la mesure : créer un conteneur GTM pour aarise.games, mettre son
+identifiant dans `AARISE_GTM_ID` (`inc/consent.php`), et y configurer la balise Google (GA4) comme dans le
+conteneur Kiwi Boing. Le choix du visiteur est aussi poussé dans le dataLayer (événement
+`aa_consent_update`). Penser à compléter le nom du cookie `_ga_<ID>` dans la page
+Cookie policy.
