@@ -1,0 +1,33 @@
+/*
+ * AARISE — ajustements propres à l'éditeur de blocs (en plus de site.css).
+ * Le fond sombre du site est repris pour que l'éditeur ressemble à la page publiée.
+ */
+
+body {
+	background: #0c0c0e;
+	color: #c9c5bc;
+}
+
+/* Les sections pleine largeur gardent leur rythme, en plus serré. */
+.aa-section {
+	padding-block: 64px;
+}
+
+.wp-block-cover.aa-hero {
+	min-height: 70vh !important;
+	padding-top: 64px;
+}
+
+/* Pas d'animation dans l'éditeur. */
+.aa-hero::before,
+.aa-hero .wp-block-cover__image-background {
+	animation: none;
+}
+
+/* Titre de la page dans l'éditeur. */
+.editor-post-title__input,
+.editor-post-title {
+	color: #ece8df;
+	font-family: "Cormorant Garamond", Georgia, serif;
+	font-weight: 500;
+}

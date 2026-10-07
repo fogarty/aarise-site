@@ -1,0 +1,158 @@
+/*
+ * AARISE — bandeau cookies.
+ * Barre flottante en bas d'écran ; « Reject all » et « Accept all » ont le même poids visuel.
+ */
+
+.aa-consent {
+	position: fixed;
+	right: 16px;
+	bottom: 16px;
+	left: 16px;
+	z-index: 9999;
+	max-width: 720px;
+	margin-inline: auto;
+	padding: 20px 24px;
+	border: 1px solid rgba(236, 232, 223, 0.14);
+	background: rgba(18, 18, 22, 0.96);
+	box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+	color: #ece8df;
+	font-family: "Inter", system-ui, sans-serif;
+	font-size: 0.875rem;
+	line-height: 1.5;
+	backdrop-filter: blur(12px);
+}
+
+.aa-consent[hidden],
+.aa-consent__panel[hidden] {
+	display: none;
+}
+
+/* Pas encore de choix (classe posée dans le <head>) : bandeau visible dès le premier rendu,
+   sans attendre le script de l'interface. */
+html.aa-needs-consent .aa-consent[hidden] {
+	display: block;
+}
+
+.aa-consent__bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 14px 24px;
+}
+
+.aa-consent__text {
+	flex: 1 1 280px;
+	margin: 0;
+	color: #c9c5bc;
+}
+
+.aa-consent a {
+	color: #cdab5b;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.aa-consent__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.aa-consent__btn {
+	padding: 0.75em 1.3em;
+	border: 1px solid #ece8df;
+	border-radius: 0;
+	background: #ece8df;
+	color: #0c0c0e;
+	font: inherit;
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.12em;
+	line-height: 1.1;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.aa-consent__btn:hover {
+	background: #cdab5b;
+	border-color: #cdab5b;
+}
+
+.aa-consent__btn--ghost {
+	background: transparent;
+	color: #ece8df;
+}
+
+.aa-consent__btn--ghost:hover {
+	background: rgba(236, 232, 223, 0.1);
+	border-color: #ece8df;
+}
+
+.aa-consent__btn:focus-visible,
+.aa-consent input:focus-visible {
+	outline: 2px solid #cdab5b;
+	outline-offset: 3px;
+}
+
+/* Panneau de personnalisation */
+
+.aa-consent__panel {
+	margin-top: 18px;
+	padding-top: 18px;
+	border-top: 1px solid rgba(236, 232, 223, 0.14);
+}
+
+.aa-consent__panel fieldset {
+	margin: 0 0 14px;
+	padding: 0;
+	border: 0;
+}
+
+.aa-consent__panel legend {
+	margin-bottom: 8px;
+	color: #ece8df;
+	font-weight: 600;
+}
+
+.aa-consent__option {
+	display: flex;
+	gap: 12px;
+	align-items: flex-start;
+	padding: 8px 0;
+	color: #c9c5bc;
+	cursor: pointer;
+}
+
+.aa-consent__option strong {
+	color: #ece8df;
+}
+
+.aa-consent__option input {
+	flex: none;
+	width: 16px;
+	height: 16px;
+	margin-top: 3px;
+	accent-color: #cdab5b;
+}
+
+.aa-consent__option input:disabled {
+	cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+	.aa-consent {
+		right: 8px;
+		bottom: 8px;
+		left: 8px;
+		padding: 16px;
+	}
+
+	.aa-consent__actions {
+		width: 100%;
+	}
+
+	.aa-consent__btn {
+		flex: 1 1 auto;
+	}
+}

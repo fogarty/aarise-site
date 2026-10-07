@@ -9,6 +9,7 @@
   ./tools/wp.ps1 POST pages/12 -Body @{ title = 'Home' }
   ./tools/wp.ps1 POST pages/12 -ContentFile content/home.html
   ./tools/wp.ps1 GET 'pages?_fields=id,slug' -Site live
+  ./tools/wp.ps1 POST media -UploadFile chemin/vers/image.webp
 
 .NOTES
   Identifiants lus dans .env à la racine du dépôt (jamais commité) :
@@ -25,6 +26,8 @@ param(
 	[hashtable] $Body = @{},
 	# Fichier de contenu (balisage de blocs Gutenberg) envoyé comme champ "content".
 	[string] $ContentFile,
+	# Fichier envoyé tel quel dans la médiathèque (avec le chemin « media »).
+	[string] $UploadFile,
 	[ValidateSet('staging', 'live')] [string] $Site = 'staging'
 )
 
@@ -61,7 +64,13 @@ if ($ContentFile) {
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $params = @{ Uri = $uri; Method = $Method; Headers = $headers; TimeoutSec = 60 }
-if ($Method -eq 'POST') {
+if ($UploadFile) {
+	$file = Get-Item (Resolve-Path $UploadFile)
+	$types = @{ '.jpg' = 'image/jpeg'; '.jpeg' = 'image/jpeg'; '.png' = 'image/png'; '.webp' = 'image/webp'; '.pdf' = 'application/pdf' }
+	$params.ContentType = $types[$file.Extension.ToLower()]
+	$params.Headers['Content-Disposition'] = "attachment; filename=$($file.Name)"
+	$params.Body = [IO.File]::ReadAllBytes($file.FullName)
+} elseif ($Method -eq 'POST') {
 	$params.ContentType = 'application/json; charset=utf-8'
 	$params.Body = [Text.Encoding]::UTF8.GetBytes(($Body | ConvertTo-Json -Depth 10))
 }
