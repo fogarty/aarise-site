@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.6.5' );
+define( 'AARISE_VERSION', '0.7.0' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -362,6 +362,41 @@ function aarise_youtube_nocookie( $html ) {
 }
 add_filter( 'embed_oembed_html', 'aarise_youtube_nocookie' );
 add_filter( 'render_block_core/embed', 'aarise_youtube_nocookie' );
+
+/**
+ * Vidéos YouTube « légères » (comme sur kiwiboing.com) : tant que le visiteur n'a pas cliqué,
+ * on affiche le visuel de la page (« Image mise en avant ») avec une pastille « Watch the
+ * trailer », au lieu de charger le lecteur YouTube (≈ 500 Ko de scripts, et aucune connexion à
+ * Google avant le clic). Le lecteur (youtube-nocookie, lecture automatique) est inséré au clic
+ * par assets/js/site.js.
+ *
+ * @param string $content Rendu du bloc.
+ * @param array  $block   Bloc analysé.
+ * @return string
+ */
+function aarise_youtube_facade( $content, $block ) {
+	if ( is_admin() || empty( $block['attrs']['providerNameSlug'] ) || 'youtube' !== $block['attrs']['providerNameSlug'] ) {
+		return $content;
+	}
+	if ( ! preg_match( '#<iframe[^>]*src="https://www\.youtube(?:-nocookie)?\.com/embed/([A-Za-z0-9_-]{6,})[^"]*"[^>]*>\s*</iframe>#', $content, $m ) ) {
+		return $content;
+	}
+	$title   = preg_match( '#title="([^"]*)"#', $m[0], $t ) ? html_entity_decode( $t[1], ENT_QUOTES ) : 'YouTube';
+	$src     = 'https://www.youtube-nocookie.com/embed/' . $m[1] . '?autoplay=1&rel=0';
+	$post_id = is_singular() ? get_queried_object_id() : 0;
+	$poster  = $post_id && has_post_thumbnail( $post_id )
+		? get_the_post_thumbnail( $post_id, 'large', array( 'alt' => '', 'loading' => 'lazy', 'sizes' => '(max-width: 1300px) 100vw, 1240px' ) )
+		: '';
+	$facade  = sprintf(
+		'<button type="button" class="aa-video" data-src="%1$s" data-title="%2$s" aria-label="%3$s">%4$s<span class="aa-video__cta"><span class="aa-video__icon" aria-hidden="true"></span>Watch the trailer</span></button>',
+		esc_url( $src ),
+		esc_attr( $title ),
+		esc_attr( 'Play the video: ' . $title ),
+		$poster
+	);
+	return str_replace( $m[0], $facade, $content );
+}
+add_filter( 'render_block_core/embed', 'aarise_youtube_facade', 20, 2 );
 
 /**
  * Balises de description et de partage (Open Graph / Twitter), sauf si une extension SEO

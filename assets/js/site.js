@@ -39,6 +39,22 @@
 		});
 	}
 
+	/* Vidéos YouTube « légères » : le lecteur n'est chargé qu'au clic (voir functions.php). */
+	document.addEventListener('click', function (event) {
+		var facade = event.target.closest('.aa-video');
+		if (!facade) {
+			return;
+		}
+		var iframe = document.createElement('iframe');
+		iframe.src = facade.getAttribute('data-src');
+		iframe.title = facade.getAttribute('data-title') || 'YouTube';
+		iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+		iframe.allowFullscreen = true;
+		iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+		facade.replaceWith(iframe);
+		iframe.focus();
+	});
+
 	/* Page d'une offre d'emploi : le champ « Position » du formulaire est pré-rempli. */
 	var apply = document.querySelector('[data-aa-position]');
 	if (apply) {
