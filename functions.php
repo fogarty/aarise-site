@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.6.1' );
+define( 'AARISE_VERSION', '0.6.2' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -206,15 +206,33 @@ add_filter( 'render_block_core/post-featured-image', 'aarise_featured_image_load
 function aarise_dequeue_unused_assets() {
 	wp_dequeue_style( 'astra-google-fonts' );
 	wp_dequeue_script( 'astra-dom-purify' );
-
-	$has_form = is_singular( 'job' ) || ( is_singular() && has_block( 'srfm/form', get_queried_object() ) );
-	if ( ! $has_form ) {
-		foreach ( array( 'sureforms-pro-signature', 'sureforms-pro-custom-styles' ) as $handle ) {
-			wp_dequeue_style( $handle );
-		}
-	}
 }
 add_action( 'wp_enqueue_scripts', 'aarise_dequeue_unused_assets', 999 );
+
+/**
+ * La page affichée contient-elle un formulaire SureForms ?
+ *
+ * @return bool
+ */
+function aarise_page_has_form() {
+	return is_singular( 'job' ) || ( is_singular() && has_block( 'srfm/form', get_queried_object() ) );
+}
+
+/**
+ * Styles de SureForms Pro : seulement sur les pages avec un formulaire. Retirés à l'écriture de
+ * la balise, car l'extension les ajoute après les autres styles.
+ *
+ * @param string $tag    Balise <link>.
+ * @param string $handle Identifiant du style.
+ * @return string
+ */
+function aarise_drop_form_styles( $tag, $handle ) {
+	if ( ! is_admin() && in_array( $handle, array( 'sureforms-pro-signature', 'sureforms-pro-custom-styles' ), true ) && ! aarise_page_has_form() ) {
+		return '';
+	}
+	return $tag;
+}
+add_filter( 'style_loader_tag', 'aarise_drop_form_styles', 10, 2 );
 
 /**
  * Pas de préconnexion aux serveurs de Google Fonts (ajoutée par Astra) : le site n'en utilise pas.
@@ -238,14 +256,13 @@ function aarise_remove_google_fonts_hints( $urls, $relation_type ) {
 	);
 }
 add_filter( 'wp_resource_hints', 'aarise_remove_google_fonts_hints', 99, 2 );
-add_action( 'wp_print_styles', 'aarise_dequeue_unused_assets', 999 );
 
 /**
  * Précharge les polices principales (évite le changement de police au chargement).
  */
 function aarise_preload_fonts() {
 	$dir = get_stylesheet_directory_uri() . '/assets/fonts/';
-	foreach ( array( 'inter-var.woff2', 'cormorant-garamond-500.woff2' ) as $font ) {
+	foreach ( array( 'inter-var.woff2', 'cormorant-garamond-500.woff2', 'cormorant-garamond-500-italic.woff2' ) as $font ) {
 		printf( '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n", esc_url( $dir . $font ) );
 	}
 }
