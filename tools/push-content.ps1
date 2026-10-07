@@ -61,7 +61,7 @@ foreach ($form in $config.forms) {
 		_srfm_forms_styling      = $formStyling
 		_srfm_email_notification = @(@{
 			id = 1; status = $true; is_raw_format = $false; name = 'Admin Notification Email'
-			email_to = $form.email_to; email_reply_to = '{admin_email}'; from_name = '{site_title}'
+			email_to = $form.email_to; email_reply_to = '{form:srfm-email}'; from_name = '{site_title}'
 			from_email = 'contact@aarise.games'; email_cc = ''; email_bcc = ''
 			subject = 'New {form_title} - {site_title}'; email_body = '{all_data}'
 		})
