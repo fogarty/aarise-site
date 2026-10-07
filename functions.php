@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.1.0' );
+define( 'AARISE_VERSION', '0.1.1' );
 
 /**
  * Régénère les règles de réécriture et vide le cache une fois par version du thème
@@ -63,6 +63,31 @@ function aarise_redirect_to_primary_domain() {
 	exit;
 }
 add_action( 'template_redirect', 'aarise_redirect_to_primary_domain', 0 );
+
+/**
+ * Hors production (staging.aarise.games…), le site n'est jamais indexé : balise robots et
+ * en-tête X-Robots-Tag, qui couvre aussi les fichiers et l'API.
+ */
+function aarise_is_production() {
+	return 'www.aarise.games' === wp_parse_url( home_url(), PHP_URL_HOST );
+}
+
+function aarise_noindex_outside_production( $robots ) {
+	if ( ! aarise_is_production() ) {
+		$robots['noindex']  = true;
+		$robots['nofollow'] = true;
+		unset( $robots['index'], $robots['follow'], $robots['max-image-preview'] );
+	}
+	return $robots;
+}
+add_filter( 'wp_robots', 'aarise_noindex_outside_production', 99 );
+
+function aarise_noindex_header_outside_production() {
+	if ( ! aarise_is_production() ) {
+		header( 'X-Robots-Tag: noindex, nofollow', true );
+	}
+}
+add_action( 'send_headers', 'aarise_noindex_header_outside_production' );
 
 /**
  * Styles du site, chargés après ceux d'Astra.
