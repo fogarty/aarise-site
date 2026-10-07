@@ -66,7 +66,7 @@ foreach ($form in $config.forms) {
 			id = 1; status = $true; is_raw_format = $false; name = 'Admin Notification Email'
 			email_to = $form.email_to; email_reply_to = '{form:srfm-email}'; from_name = '{site_title}'
 			from_email = 'contact@aarise.games'; email_cc = ''; email_bcc = '{admin_email}'
-			subject = 'New {form_title} - {site_title}'; email_body = '{all_data}'
+			subject = $(if ($form.subject) { $form.subject } else { 'New {form_title} - {site_title}' }); email_body = '{all_data}'
 		})
 		_srfm_form_confirmation  = @(@{
 			id = 1; confirmation_type = 'same page'; page_url = ''; custom_url = ''
