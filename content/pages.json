@@ -1,0 +1,23 @@
+{
+  "pages": [
+    { "slug": "home", "title": "Home", "file": "home.html", "template": "templates/canvas.php", "excerpt": "" },
+    { "slug": "about", "title": "About", "file": "about.html", "template": "templates/canvas.php", "excerpt": "AARISE is the next chapter of the original team behind Empire of the Ants: an independent studio in La Rochelle crafting immersive worlds." },
+    { "slug": "projects", "title": "Projects", "file": "projects.html", "template": "templates/canvas.php", "excerpt": "The games of AARISE, an independent studio in La Rochelle, France. Every project is a different journey, with one constant: the art of immersion." },
+    { "slug": "jobs", "title": "Jobs", "file": "jobs.html", "template": "templates/canvas.php", "excerpt": "Join AARISE, an independent game studio in La Rochelle, France. Open positions and spontaneous applications." },
+    { "slug": "press-kit", "title": "Press kit", "file": "press-kit.html", "template": "templates/canvas.php", "excerpt": "AARISE press kit: fact sheet, boilerplate, logos and press contact." },
+    { "slug": "contact", "title": "Contact", "file": "contact.html", "template": "templates/canvas.php", "excerpt": "Contact AARISE, independent game studio in La Rochelle, France: partnerships, press and careers." },
+    { "slug": "legal-notice", "title": "Legal notice", "file": "legal-notice.html", "template": "", "excerpt": "" },
+    { "slug": "privacy-policy", "title": "Privacy policy", "file": "privacy-policy.html", "template": "", "excerpt": "" },
+    { "slug": "cookie-policy", "title": "Cookie policy", "file": "cookie-policy.html", "template": "", "excerpt": "" }
+  ],
+  "projects": [
+    { "slug": "kiwi-boing", "title": "Kiwi Boing", "file": "project-kiwi-boing.html", "image": "../../kiwi-boing-site/assets/img/key-art.webp", "image_alt": "Kiwi Boing key art", "excerpt": "A kiwi that can’t fly, a plane in pieces: a 3D platformer across three islands packed with secrets." }
+  ],
+  "synced_patterns": [
+    { "slug": "site-footer", "title": "Site footer", "file": "site-footer.html" }
+  ],
+  "menus": [
+    { "name": "Main menu", "location": "primary", "pages": ["projects", "about", "jobs", "press-kit", "contact"] },
+    { "name": "Legal links", "location": "legal", "pages": ["legal-notice", "privacy-policy", "cookie-policy"] }
+  ]
+}

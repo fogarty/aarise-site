@@ -309,7 +309,7 @@ hr,
 /* Liste de faits : « Genre — 3D platformer ». Le libellé est en gras. */
 .wp-block-list.is-style-facts,
 ul.is-style-facts {
-	margin: 0 0 2rem;
+	margin-block: 0 2rem;
 	padding: 0;
 	list-style: none;
 	border-top: 1px solid var(--aa-line);
@@ -655,7 +655,8 @@ body.admin-bar .aa-header {
 .aa-section > .wp-block-group__inner-container > .aa-measure,
 .aa-section:not(:has(> .wp-block-group__inner-container)) > .aa-measure {
 	width: min(100% - 2 * var(--aa-gutter), var(--aa-measure));
-	margin-inline: 0 auto;
+	/* Aligné sur le bord gauche de la colonne large. */
+	margin-inline: max(var(--aa-gutter), (100% - var(--aa-wide)) / 2) auto;
 }
 
 .aa-section .has-text-align-center.aa-measure,
@@ -729,7 +730,7 @@ body.admin-bar .aa-header {
 
 /* Images */
 .wp-block-image {
-	margin: 0 0 2rem;
+	margin-block: 0 2rem;
 }
 
 .wp-block-image img {
@@ -745,7 +746,7 @@ body.admin-bar .aa-header {
 
 /* Vidéos intégrées */
 .wp-block-embed {
-	margin: 0 0 2rem;
+	margin-block: 0 2rem;
 }
 
 .wp-block-embed.wp-has-aspect-ratio .wp-block-embed__wrapper {
@@ -1146,7 +1147,7 @@ body.admin-bar .aa-header {
 }
 
 .wp-block-table {
-	margin: 0 0 2rem;
+	margin-block: 0 2rem;
 	overflow-x: auto;
 }
 
