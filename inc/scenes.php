@@ -224,7 +224,7 @@ function aarise_scene_horizon( $seed ) {
 		$rad   = deg2rad( $a - 90 );
 		$rays .= sprintf( '<line x1="520" y1="470" x2="%.1f" y2="%.1f" class="aa-scene__ray"/>', 520 + cos( $rad ) * 700, 470 + sin( $rad ) * 700 );
 	}
-	return '<svg viewBox="0 0 900 700" preserveAspectRatio="xMidYMax slice"><defs><radialGradient id="aa-sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#cdab5b" stop-opacity="0.85"/><stop offset="0.55" stop-color="#cdab5b" stop-opacity="0.25"/><stop offset="1" stop-color="#cdab5b" stop-opacity="0"/></radialGradient><clipPath id="aa-sky"><rect width="900" height="470"/></clipPath></defs><g class="aa-scene__rays">' . $rays . '</g><g clip-path="url(#aa-sky)"><circle class="aa-scene__sun" cx="520" cy="470" r="230" fill="url(#aa-sun)"/><circle class="aa-scene__sun-core" cx="520" cy="470" r="90"/></g><line x1="0" x2="900" y1="470" y2="470" class="aa-scene__horizon"/>' . $lines . '</svg>';
+	return '<svg viewBox="0 0 900 700" preserveAspectRatio="xMidYMax slice"><defs><radialGradient id="aa-sun" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#cdab5b" stop-opacity="0.85"/><stop offset="0.55" stop-color="#cdab5b" stop-opacity="0.25"/><stop offset="1" stop-color="#cdab5b" stop-opacity="0"/></radialGradient><clipPath id="aa-sky"><rect width="900" height="470"/></clipPath></defs><g class="aa-scene__rays">' . $rays . '</g><g clip-path="url(#aa-sky)"><circle class="aa-scene__sun" cx="520" cy="440" r="300" fill="url(#aa-sun)"/><circle class="aa-scene__sun-core" cx="520" cy="440" r="110"/></g><line x1="0" x2="900" y1="470" y2="470" class="aa-scene__horizon"/>' . $lines . '</svg>';
 }
 
 function aarise_scene_beams( $seed ) {
