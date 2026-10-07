@@ -1487,6 +1487,24 @@ body.admin-bar .aa-header {
 	gap: clamp(32px, 4vw, 48px) clamp(20px, 2.5vw, 32px);
 }
 
+@media (max-width: 600px) {
+	.aa-team {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 32px 16px;
+	}
+
+	.aa-member h3,
+	.aa-member .aa-member__name {
+		font-size: 1.15rem;
+	}
+
+	.aa-member p,
+	.aa-member .aa-member__role {
+		font-size: 0.625rem;
+		letter-spacing: 0.12em;
+	}
+}
+
 .aa-team > .wp-block-group__inner-container {
 	display: contents;
 }
