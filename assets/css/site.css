@@ -1315,6 +1315,37 @@ body.admin-bar .aa-header {
 	color: var(--aa-gold);
 }
 
+.aa-footer .aa-socials {
+	margin-top: 28px;
+}
+
+.aa-footer .wp-social-link a {
+	display: block;
+	padding: 0;
+	line-height: 0;
+}
+
+/* Logo de la Région : couleurs officielles, sur cartouche blanc. */
+.aa-partner {
+	margin: 0;
+}
+
+.aa-partner a {
+	display: inline-block;
+	padding: 6px 10px;
+	background: #fff;
+	line-height: 0;
+	transition: opacity 0.2s;
+}
+
+.aa-partner a:hover {
+	opacity: 0.85;
+}
+
+.aa-partner img {
+	width: 160px;
+}
+
 .aa-footer__bar {
 	display: flex;
 	flex-wrap: wrap;

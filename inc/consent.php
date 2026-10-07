@@ -19,7 +19,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /** Identifiant du conteneur Google Tag Manager du site AARISE (ex. « GTM-XXXXXXX »). Vide = GTM désactivé. */
-define( 'AARISE_GTM_ID', '' );
+define( 'AARISE_GTM_ID', 'GTM-N36SX5P4' );
 
 /** « basic » : GTM chargé seulement après consentement. « advanced » : GTM toujours chargé, Consent Mode gère les tags. */
 define( 'AARISE_CONSENT_MODE', 'basic' );

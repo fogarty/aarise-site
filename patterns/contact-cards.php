@@ -33,7 +33,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><a href="/press-kit/">Press kit</a></p>
+<p><a href="mailto:press@aarise.games">press@aarise.games</a><br><a href="/press-kit/">Press kit</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column -->
 
@@ -47,7 +47,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><a href="/jobs/">Jobs</a></p>
+<p><a href="mailto:jobs@aarise.games">jobs@aarise.games</a><br><a href="/jobs/">Open positions</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:column --></div>
 <!-- /wp:columns --></div>

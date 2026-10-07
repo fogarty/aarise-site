@@ -141,8 +141,7 @@ de couleurs ou de polices à choisir, seulement celles du site.
 ## Cookies, GTM, GA4
 
 Même système que Kiwi Boing (`inc/consent.php`) : rien n'est chargé avant le consentement
-(mode « basic »). Pour activer la mesure : créer un conteneur GTM pour aarise.games, mettre son
-identifiant dans `AARISE_GTM_ID` (`inc/consent.php`), et y configurer la balise Google (GA4) comme dans le
+(mode « basic »). Conteneur GTM : `GTM-N36SX5P4` (`AARISE_GTM_ID`), flux GA4 : `G-M2L60F8YNM` (cookie `_ga_M2L60F8YNM`,
+listé dans la page Cookie policy). Dans GTM, configurer la balise Google (GA4) comme dans le
 conteneur Kiwi Boing. Le choix du visiteur est aussi poussé dans le dataLayer (événement
-`aa_consent_update`). Penser à compléter le nom du cookie `_ga_<ID>` dans la page
-Cookie policy.
+`aa_consent_update`).
