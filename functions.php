@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.6.2' );
+define( 'AARISE_VERSION', '0.6.3' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -543,3 +543,46 @@ function aarise_admin_bar_shortcuts( $bar ) {
 	);
 }
 add_action( 'admin_bar_menu', 'aarise_admin_bar_shortcuts', 80 );
+
+/**
+ * Sitemap (wp-sitemap.xml) : seulement les pages, projets et offres d'emploi. Pas de liste des
+ * auteurs (elle donnerait les identifiants de connexion), ni des pages autonomes des formulaires.
+ *
+ * @param WP_Sitemaps_Provider|false $provider Fournisseur.
+ * @param string                     $name     Nom du fournisseur.
+ * @return WP_Sitemaps_Provider|false
+ */
+function aarise_sitemap_providers( $provider, $name ) {
+	return in_array( $name, array( 'users', 'taxonomies' ), true ) ? false : $provider;
+}
+add_filter( 'wp_sitemaps_add_provider', 'aarise_sitemap_providers', 10, 2 );
+
+function aarise_sitemap_post_types( $post_types ) {
+	return array_intersect_key( $post_types, array_flip( array( 'page', 'project', 'job' ) ) );
+}
+add_filter( 'wp_sitemaps_post_types', 'aarise_sitemap_post_types' );
+
+/**
+ * Pages d'auteur (/author/<identifiant>/) : inutiles ici, redirigées vers l'accueil.
+ */
+function aarise_redirect_author_pages() {
+	if ( is_author() ) {
+		wp_safe_redirect( home_url( '/' ), 301, 'AARISE' );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'aarise_redirect_author_pages', 2 );
+
+/**
+ * API REST : la liste des utilisateurs n'est visible que des personnes connectées.
+ *
+ * @param array $endpoints Routes de l'API.
+ * @return array
+ */
+function aarise_hide_rest_users( $endpoints ) {
+	if ( ! is_user_logged_in() ) {
+		unset( $endpoints['/wp/v2/users'], $endpoints['/wp/v2/users/(?P<id>[\d]+)'] );
+	}
+	return $endpoints;
+}
+add_filter( 'rest_endpoints', 'aarise_hide_rest_users' );
