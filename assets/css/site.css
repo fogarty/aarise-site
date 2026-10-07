@@ -2014,13 +2014,24 @@ body.admin-bar .aa-header {
 
 .aa-partners img {
 	display: block;
-	width: auto;
-	max-width: 180px;
-	height: 56px;
+	max-width: 260px;
 	object-fit: contain;
 	filter: brightness(0) invert(1);
-	opacity: 0.8;
+	opacity: 0.85;
 	transition: opacity 0.3s;
+}
+
+/* Taille par défaut ; un logo dont on règle la largeur ou la hauteur dans l'éditeur
+   (bloc Image > Réglages > Dimensions) garde sa propre taille. */
+.aa-partners img:not([style*="width"]):not([style*="height"]) {
+	width: auto;
+	height: 84px;
+}
+
+@media (max-width: 600px) {
+	.aa-partners img:not([style*="width"]):not([style*="height"]) {
+		height: 64px;
+	}
 }
 
 .aa-partners a:hover img {

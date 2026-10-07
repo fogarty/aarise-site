@@ -139,7 +139,8 @@ de couleurs ou de polices à choisir, seulement celles du site.
 - **Partenaires** : dans le pied de page, groupe de logos sous « With the support of » : bouton **+**
   > Image, un bloc par partenaire (lien vers son site possible). Les logos sont affichés en blanc et
   à la même hauteur ; fournir de préférence un logo blanc ou d'une seule couleur sur fond transparent
-  (PNG ou SVG). Un logo à détails internes (comme le lion de la Région) doit être fourni déjà en blanc.
+  (PNG ou SVG). Taille : 84 px de haut par défaut ; pour ajuster un logo, le sélectionner puis
+  *Réglages > Dimensions* (largeur ou hauteur) : sa taille l'emporte. Un logo à détails internes (comme le lion de la Région) doit être fourni déjà en blanc.
 - **Équipe** (page About) : composition **Team** / **Team member**. Pour ajouter quelqu'un, dupliquer
   un membre et changer nom et poste : son portrait-paysage est généré à partir du nom. Pour une vraie
   photo, ajouter un bloc Image dans le membre.
