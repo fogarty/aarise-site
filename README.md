@@ -153,9 +153,10 @@ de couleurs ou de polices à choisir, seulement celles du site.
   changer, ajouter au groupe la classe `aa-scene-contours`, `-orbits`, `-horizon`, `-beams` ou
   `-ripples` (panneau Avancé > Classe CSS). Sur l'accueil, une image ou vidéo mise dans le bloc
   Couverture remplace la montagne.
-- **Formulaires** (*SureForms*) : Contact (vers contact@), Press request (press@), Job application
+- **Formulaires** (*SureForms*) : Contact form (vers contact@), Press request (press@), Job application
   (jobs@, CV en PDF protégé). Réponses dans *SureForms > Entries*, destinataires dans les réglages
-  de chaque formulaire.
+  de chaque formulaire. L'apparence (couleurs, polices) est imposée par le thème : les réglages de
+  style de SureForms n'ont pas d'effet sur le site, on peut enregistrer sans crainte.
 - **Partage et référencement** : l'**Extrait** d'une page sert de description ; son **Image mise en
   avant**, d'image de partage (sinon la vignette du studio).
 

@@ -1861,6 +1861,11 @@ body.admin-bar .aa-header {
 	--srfm-form-border-radius-right: 0px;
 	--srfm-form-border-radius-bottom: 0px;
 	--srfm-form-border-radius-left: 0px;
+	--srfm-label-font-size: 14px;
+	--srfm-label-line-height: 21px;
+	--srfm-checkbox-label-font-size: 15px;
+	--srfm-checkbox-label-line-height: 22px;
+	--srfm-description-font-size: 13px;
 	background: transparent;
 	font-family: var(--aa-sans);
 }
