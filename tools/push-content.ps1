@@ -59,10 +59,13 @@ foreach ($form in $config.forms) {
 	$meta = @{
 		_srfm_submit_button_text = $form.submit
 		_srfm_forms_styling      = $formStyling
+		# Copie cachée à l'adresse d'administration (Réglages > Général) : l'envoi passe par le compte
+		# Gmail de cette adresse, et Gmail ne montre pas en boîte de réception les messages qu'on
+		# s'envoie via un groupe (contact@, press@, jobs@) ; une copie directe, si.
 		_srfm_email_notification = @(@{
 			id = 1; status = $true; is_raw_format = $false; name = 'Admin Notification Email'
 			email_to = $form.email_to; email_reply_to = '{form:srfm-email}'; from_name = '{site_title}'
-			from_email = 'contact@aarise.games'; email_cc = ''; email_bcc = ''
+			from_email = 'contact@aarise.games'; email_cc = ''; email_bcc = '{admin_email}'
 			subject = 'New {form_title} - {site_title}'; email_body = '{all_data}'
 		})
 		_srfm_form_confirmation  = @(@{
