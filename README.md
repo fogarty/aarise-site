@@ -46,43 +46,56 @@ tools/wp.ps1         Accès à l'API REST WordPress
    - Cliquer **Authenticate**, puis choisir la branche `main`.
    - **Deployment Path** : `wp-content/themes/aarise` (relatif à `public_html`).
 5. Cliquer **Start Deployment**.
-6. **Ne pas activer le thème tout de suite** : le site actuel tourne sur Astra directement.
+6. **Ne pas activer le thème en production** : le site actuel tourne sur Astra directement.
    Préparer le nouveau site d'abord (voir § 4).
 
 > Le dossier `wp-content/themes/aarise` ne doit pas exister avant le premier déploiement.
 
-## 3. Déploiement automatique à chaque push
+## 3. Déploiement automatique
 
 Le workflow `.github/workflows/deploy.yml` appelle l'API Cloudways pour faire le *Pull* tout seul.
 
-1. **Cloudways > API Integration > Access Tokens** : le token créé pour Kiwi Boing peut servir
-   s'il couvre tout le serveur ; sinon en créer un (accès **Git deployment**).
-2. Identifiants : dans l'URL de la page de l'application AARISE, on lit
-   `.../server/<SERVER_ID>/application/<APP_ID>`. Le `SERVER_ID` est le même que pour Kiwi Boing,
-   l'`APP_ID` est différent.
+- **Push sur `main` → staging.** Pendant la refonte, la production n'est jamais touchée par un push.
+- **Production** : *Actions > Deploy to Cloudways > Run workflow*, cible `production`.
+
+1. **Cloudways > API Integration > Access Tokens** : un token avec accès **Git deployment**.
+2. Identifiants : dans l'URL de la page d'une application, on lit
+   `.../server/<SERVER_ID>/application/<APP_ID>`.
 3. Sur GitHub, **dépôt aarise-site > Settings > Secrets and variables > Actions** :
-   - Secrets : `CLOUDWAYS_ACCESS_TOKEN`, `CLOUDWAYS_SERVER_ID`, `CLOUDWAYS_APP_ID`
+   - Secrets : `CLOUDWAYS_ACCESS_TOKEN`, `CLOUDWAYS_SERVER_ID`, `CLOUDWAYS_APP_ID` (production),
+     `CLOUDWAYS_STAGING_APP_ID` (staging), et `CLOUDWAYS_STAGING_SERVER_ID` seulement si le staging
+     est sur un autre serveur.
    - Variable : `CLOUDWAYS_DEPLOY_PATH` = `wp-content/themes/aarise`
 4. Pousser sur `main` : l'onglet **Actions** montre le déploiement.
 
-## 4. Refaire le site sans casser l'actuel
+## 4. Staging : refaire le site sans casser l'actuel
 
 Le site actuel (Astra + Spectra, pages Home, About, Projects, Early Access) reste en ligne
-pendant la refonte. Deux options :
+pendant la refonte ; tout se construit sur le staging.
 
-- **Staging Cloudways** (recommandé) : *Application > Staging Management* crée une copie ;
-  on y active le thème AARISE et on construit les pages, puis *Push to Live*.
-  Prévoir alors une deuxième configuration Git (deploy path identique) sur l'app de staging.
-- **Directement en production** : construire les nouvelles pages en brouillon, puis activer
-  le thème et basculer la page d'accueil (*Réglages > Lecture*) le jour J.
+1. **Cloudways > l'application AARISE > Staging Management > Create Staging** (même serveur).
+   C'est une copie complète (fichiers + base) : le thème `aarise` et les comptes y sont déjà.
+2. Sur l'application de **staging**, refaire le § 2 : **Deployment via Git**, nouvelle clé SSH à
+   ajouter comme **deuxième** deploy key du dépôt (un dépôt peut en avoir plusieurs), branche `main`,
+   chemin `wp-content/themes/aarise`.
+3. Ajouter le secret `CLOUDWAYS_STAGING_APP_ID` (§ 3).
+4. Dans `.env`, renseigner `WP_STAGING_URL` (adresse du staging). Les identifiants de production
+   y fonctionnent, la base ayant été copiée.
+5. Dans le WordPress du staging : **Apparence > Thèmes > activer « AARISE »**.
+
+**Mise en ligne** : *Staging Management > Push to Live* (fichiers et base). Faire une sauvegarde
+de la production juste avant ; après la bascule, lancer un déploiement `production` pour que la
+copie Git de la production soit de nouveau alignée sur `main`.
 
 ## 5. Gérer les pages via l'API REST
 
-`tools/wp.ps1` lit, crée et modifie pages et contenus via l'API REST WordPress.
+`tools/wp.ps1` lit, crée et modifie pages et contenus via l'API REST WordPress. Il vise le
+**staging** par défaut ; ajouter `-Site live` pour la production.
 
 1. WordPress (AARISE) > **Utilisateurs > Profil > Mots de passe d'application** : créer un mot
    de passe nommé « Claude Code ».
-2. Copier `.env.example` en `.env` et remplir `WP_USER` et `WP_APP_PASSWORD`. `.env` n'est jamais commité.
+2. Copier `.env.example` en `.env` et remplir les valeurs. `.env` n'est jamais commité :
+   ne jamais le créer ni le modifier sur GitHub.
 3. Exemple : `./tools/wp.ps1 GET 'pages?_fields=id,slug,title'`
 
 ## Développement

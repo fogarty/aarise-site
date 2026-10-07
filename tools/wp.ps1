@@ -2,23 +2,30 @@
 .SYNOPSIS
   Appelle l'API REST WordPress du site AARISE avec un mot de passe d'application.
 
+  Par défaut sur le staging (pendant la refonte) ; -Site live pour la production.
+
 .EXAMPLE
-  ./tools/wp.ps1 GET 'pages?per_page=50&_fields=id,slug,status,title,lang'
-  ./tools/wp.ps1 POST pages/12 -Body @{ title = 'Accueil' }
-  ./tools/wp.ps1 POST pages/12 -ContentFile content/accueil.fr.html
+  ./tools/wp.ps1 GET 'pages?per_page=50&_fields=id,slug,status,title'
+  ./tools/wp.ps1 POST pages/12 -Body @{ title = 'Home' }
+  ./tools/wp.ps1 POST pages/12 -ContentFile content/home.html
+  ./tools/wp.ps1 GET 'pages?_fields=id,slug' -Site live
 
 .NOTES
   Identifiants lus dans .env à la racine du dépôt (jamais commité) :
     WP_URL=https://www.aarise.games
     WP_USER=identifiant WordPress
     WP_APP_PASSWORD=mot de passe d'application
+    WP_STAGING_URL=adresse du staging Cloudways
+  WP_STAGING_USER et WP_STAGING_APP_PASSWORD sont facultatifs : le staging étant une copie
+  de la production, les mêmes identifiants y fonctionnent.
 #>
 param(
 	[Parameter(Mandatory)] [ValidateSet('GET', 'POST', 'DELETE')] [string] $Method,
 	[Parameter(Mandatory)] [string] $Path,
 	[hashtable] $Body = @{},
 	# Fichier de contenu (balisage de blocs Gutenberg) envoyé comme champ "content".
-	[string] $ContentFile
+	[string] $ContentFile,
+	[ValidateSet('staging', 'live')] [string] $Site = 'staging'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -28,6 +35,12 @@ if (-not (Test-Path $envFile)) { throw "Fichier .env introuvable (voir .env.exam
 $config = @{}
 Get-Content $envFile | Where-Object { $_ -match '^\s*([A-Z_]+)\s*=\s*(.*)\s*$' } | ForEach-Object {
 	$config[$Matches[1]] = $Matches[2].Trim('"', "'")
+}
+if ($Site -eq 'staging') {
+	if (-not $config.WP_STAGING_URL) { throw "WP_STAGING_URL manquant dans .env (ou -Site live pour la production)" }
+	$config.WP_URL = $config.WP_STAGING_URL
+	if ($config.WP_STAGING_USER) { $config.WP_USER = $config.WP_STAGING_USER }
+	if ($config.WP_STAGING_APP_PASSWORD) { $config.WP_APP_PASSWORD = $config.WP_STAGING_APP_PASSWORD }
 }
 foreach ($key in 'WP_URL', 'WP_USER', 'WP_APP_PASSWORD') {
 	if (-not $config[$key]) { throw "$key manquant dans .env" }

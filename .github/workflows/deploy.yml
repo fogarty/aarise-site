@@ -1,12 +1,18 @@
-# Déploie le thème sur Cloudways à chaque push sur main.
+# Déploie le thème sur Cloudways.
 # Demande à Cloudways de faire un « git pull » via son API (la même action
 # que le bouton « Pull » du panneau Deployment via Git).
+#
+# - Push sur main            → staging (pendant la refonte, la production n'est pas touchée)
+# - Actions > Run workflow   → au choix staging ou production
 #
 # Authentification : Access Token Cloudways (remplace l'ancien email + API key,
 # retiré le 15 octobre 2026), envoyé directement en Bearer.
 #
 # Secrets à créer dans GitHub > Settings > Secrets and variables > Actions :
-#   CLOUDWAYS_ACCESS_TOKEN, CLOUDWAYS_SERVER_ID, CLOUDWAYS_APP_ID
+#   CLOUDWAYS_ACCESS_TOKEN, CLOUDWAYS_SERVER_ID
+#   CLOUDWAYS_APP_ID           application de production
+#   CLOUDWAYS_STAGING_APP_ID   application de staging
+#   CLOUDWAYS_STAGING_SERVER_ID  (facultatif, si le staging est sur un autre serveur)
 # Variable (onglet Variables) :
 #   CLOUDWAYS_DEPLOY_PATH  ex. wp-content/themes/aarise
 
@@ -16,38 +22,57 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      target:
+        description: Application à déployer
+        type: choice
+        options: [staging, production]
+        default: staging
 
 concurrency:
-  group: cloudways-deploy
+  group: cloudways-deploy-${{ inputs.target || 'staging' }}
   cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger git pull on Cloudways
+      - name: Trigger git pull on Cloudways (${{ inputs.target || 'staging' }})
         env:
+          TARGET: ${{ inputs.target || 'staging' }}
           CW_TOKEN: ${{ secrets.CLOUDWAYS_ACCESS_TOKEN }}
-          CW_SERVER_ID: ${{ secrets.CLOUDWAYS_SERVER_ID }}
-          CW_APP_ID: ${{ secrets.CLOUDWAYS_APP_ID }}
+          CW_PROD_SERVER_ID: ${{ secrets.CLOUDWAYS_SERVER_ID }}
+          CW_PROD_APP_ID: ${{ secrets.CLOUDWAYS_APP_ID }}
+          CW_STAGING_SERVER_ID: ${{ secrets.CLOUDWAYS_STAGING_SERVER_ID }}
+          CW_STAGING_APP_ID: ${{ secrets.CLOUDWAYS_STAGING_APP_ID }}
           CW_DEPLOY_PATH: ${{ vars.CLOUDWAYS_DEPLOY_PATH }}
         run: |
           # Retire espaces et retours à la ligne collés par erreur avec les secrets.
-          token=$(printf '%s' "$CW_TOKEN" | tr -d '[:space:]')
-          if [ -z "$token" ]; then
-            echo "Secret CLOUDWAYS_ACCESS_TOKEN manquant" >&2
-            exit 1
+          clean() { printf '%s' "$1" | tr -d '[:space:]'; }
+          token=$(clean "$CW_TOKEN")
+          if [ "$TARGET" = "production" ]; then
+            server_id=$(clean "$CW_PROD_SERVER_ID")
+            app_id=$(clean "$CW_PROD_APP_ID")
+          else
+            server_id=$(clean "${CW_STAGING_SERVER_ID:-$CW_PROD_SERVER_ID}")
+            app_id=$(clean "$CW_STAGING_APP_ID")
           fi
+          for v in token server_id app_id; do
+            if [ -z "${!v}" ]; then
+              echo "Secret manquant pour $TARGET : $v" >&2
+              exit 1
+            fi
+          done
 
           response=$(curl -sS -X POST "https://api.cloudways.com/api/v1/git/pull" \
             -H "Authorization: Bearer $token" \
-            --data-urlencode "server_id=$(printf '%s' "$CW_SERVER_ID" | tr -d '[:space:]')" \
-            --data-urlencode "app_id=$(printf '%s' "$CW_APP_ID" | tr -d '[:space:]')" \
+            --data-urlencode "server_id=$server_id" \
+            --data-urlencode "app_id=$app_id" \
             --data-urlencode "git_url=git@github.com:${{ github.repository }}.git" \
             --data-urlencode "branch_name=main" \
             --data-urlencode "deploy_path=$CW_DEPLOY_PATH" \
             -w '\n%{http_code}')
           status=$(tail -n1 <<< "$response")
           body=$(sed '$d' <<< "$response")
-          echo "Cloudways (HTTP $status): $(head -c 500 <<< "$body")"
+          echo "Cloudways $TARGET (HTTP $status): $(head -c 500 <<< "$body")"
           [ "$status" = "200" ]
