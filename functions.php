@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.7.7' );
+define( 'AARISE_VERSION', '0.7.8' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );
@@ -379,12 +379,17 @@ function aarise_youtube_facade( $content, $block ) {
 	if ( is_admin() || empty( $block['attrs']['providerNameSlug'] ) || 'youtube' !== $block['attrs']['providerNameSlug'] ) {
 		return $content;
 	}
-	if ( ! preg_match( '#<iframe[^>]*src="https://www\.youtube(?:-nocookie)?\.com/embed/([A-Za-z0-9_-]{6,})[^"]*"[^>]*>\s*</iframe>#', $content, $m ) ) {
+	// L'identifiant vient de l'adresse du bloc, pas du lecteur renvoyé par YouTube : une vidéo
+	// privée ou programmée (pas encore d'aperçu YouTube) s'affiche donc aussi, avec notre vignette.
+	$url = isset( $block['attrs']['url'] ) ? $block['attrs']['url'] : '';
+	if ( ! preg_match( '#(?:youtu\.be/|youtube(?:-nocookie)?\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/))([A-Za-z0-9_-]{11})#', $url, $id ) ) {
 		return $content;
 	}
-	$title   = preg_match( '#title="([^"]*)"#', $m[0], $t ) ? html_entity_decode( $t[1], ENT_QUOTES ) : 'YouTube';
-	$src     = 'https://www.youtube-nocookie.com/embed/' . $m[1] . '?autoplay=1&rel=0';
 	$post_id = is_singular() ? get_queried_object_id() : 0;
+	$title   = preg_match( '#<iframe[^>]*title="([^"]*)"#', $content, $t )
+		? html_entity_decode( $t[1], ENT_QUOTES )
+		: ( $post_id ? get_the_title( $post_id ) . ' — Trailer' : 'Trailer' );
+	$src     = 'https://www.youtube-nocookie.com/embed/' . $id[1] . '?autoplay=1&rel=0';
 	$poster  = $post_id && has_post_thumbnail( $post_id )
 		? get_the_post_thumbnail( $post_id, 'large', array( 'alt' => '', 'loading' => 'lazy', 'sizes' => '(max-width: 1300px) 100vw, 1240px' ) )
 		: '';
@@ -395,7 +400,10 @@ function aarise_youtube_facade( $content, $block ) {
 		esc_attr( 'Play the video: ' . $title ),
 		$poster
 	);
-	return str_replace( $m[0], $facade, $content );
+	// Remplace tout le contenu de l'enveloppe du bloc (lecteur YouTube, ou simple lien si YouTube
+	// n'a pas fourni d'aperçu).
+	$replaced = preg_replace( '#(<div class="wp-block-embed__wrapper">).*?(</div>\s*(?:<figcaption|</figure>))#s', '$1' . str_replace( array( '\\', '$' ), array( '\\\\', '\$' ), $facade ) . '$2', $content, 1, $count );
+	return $count ? $replaced : $content;
 }
 add_filter( 'render_block_core/embed', 'aarise_youtube_facade', 20, 2 );
 
