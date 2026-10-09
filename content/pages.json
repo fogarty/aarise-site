@@ -8,7 +8,8 @@
     { "slug": "contact", "title": "Contact", "file": "contact.html", "template": "templates/canvas.php", "excerpt": "Contact AARISE, independent game studio in La Rochelle, France: partnerships, press and careers." },
     { "slug": "legal-notice", "title": "Legal notice", "file": "legal-notice.html", "template": "", "excerpt": "" },
     { "slug": "privacy-policy", "title": "Privacy policy", "file": "privacy-policy.html", "template": "", "excerpt": "" },
-    { "slug": "cookie-policy", "title": "Cookie policy", "file": "cookie-policy.html", "template": "", "excerpt": "" }
+    { "slug": "cookie-policy", "title": "Cookie policy", "file": "cookie-policy.html", "template": "", "excerpt": "" },
+    { "slug": "contest-rules", "title": "Règlement des concours", "file": "contest-rules.html", "template": "", "excerpt": "Règlement des concours organisés par AARISE sur son serveur Discord « Aarise Community »." }
   ],
   "projects": [
     { "slug": "project-01", "title": "Project 01", "file": "project-01.html", "excerpt": "A colourful 3D collectathon platformer. Reveal on October 20.", "reveals": "kiwi-boing" },
@@ -28,6 +29,6 @@
   ],
   "menus": [
     { "name": "Main menu", "location": "primary", "pages": ["projects", "about", "jobs", "press-kit", "contact"] },
-    { "name": "Legal links", "location": "legal", "pages": ["legal-notice", "privacy-policy", "cookie-policy"] }
+    { "name": "Legal links", "location": "legal", "pages": ["legal-notice", "privacy-policy", "cookie-policy", "contest-rules"] }
   ]
 }
