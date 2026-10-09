@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'AARISE_VERSION', '0.7.8' );
+define( 'AARISE_VERSION', '0.7.9' );
 
 /** Domaine de production : en dehors, le site n'est jamais indexé. */
 define( 'AARISE_PRODUCTION_HOST', 'www.aarise.games' );

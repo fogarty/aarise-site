@@ -89,6 +89,14 @@ foreach ($page in $config.pages) {
 
 foreach ($project in $config.projects) {
 	if (-not (Wanted $project.slug)) { continue }
+	# Teaser dont le vrai projet est publié : il a été retiré par le site, on ne le recrée pas.
+	if ($project.reveals) {
+		$targetId = Find 'project' $project.reveals
+		if ($targetId -and (Wp GET "project/$targetId`?context=edit&_fields=status").status -eq 'publish') {
+			'teaser   {0,-16} retiré ({1} est publié)' -f $project.slug, $project.reveals
+			continue
+		}
+	}
 	# Statut : publié par défaut ; « future » + date_gmt (UTC) pour un projet planifié (annonce).
 	$status = if ($project.status) { $project.status } else { 'publish' }
 	$body = @{ title = $project.title; slug = $project.slug; status = $status; excerpt = $project.excerpt }

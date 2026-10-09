@@ -139,12 +139,30 @@ function aarise_retire_teasers( $new_status, $old_status, $post ) {
 	foreach ( $teasers as $teaser_id ) {
 		wp_update_post( array( 'ID' => $teaser_id, 'post_status' => 'draft' ) );
 	}
-	if ( $teasers ) {
-		do_action( 'breeze_clear_all_cache' );
-		do_action( 'breeze_clear_varnish' );
-	}
+	// Toujours vider le cache : les textes [aarise_reveal] des autres pages changent aussi.
+	do_action( 'breeze_clear_all_cache' );
+	do_action( 'breeze_clear_varnish' );
 }
 add_action( 'transition_post_status', 'aarise_retire_teasers', 10, 3 );
+
+/**
+ * Texte qui change tout seul à la publication d'un projet (nom d'un jeu encore secret).
+ *
+ *   [aarise_reveal project="kiwi-boing" before="le prochain jeu d'Aarise"]Kiwi Boing[/aarise_reveal]
+ *
+ * Avant la publication du projet : le texte « before » ; après : le texte entre les balises.
+ *
+ * @param array  $atts    Attributs (project = slug du projet, before = texte d'attente).
+ * @param string $content Texte affiché une fois le projet publié.
+ * @return string
+ */
+function aarise_reveal_shortcode( $atts, $content = '' ) {
+	$atts    = shortcode_atts( array( 'project' => '', 'before' => '' ), $atts, 'aarise_reveal' );
+	$project = $atts['project'] ? get_page_by_path( $atts['project'], OBJECT, 'project' ) : null;
+	$text    = $project && 'publish' === $project->post_status ? $content : $atts['before'];
+	return wp_kses_post( do_shortcode( $text ) );
+}
+add_shortcode( 'aarise_reveal', 'aarise_reveal_shortcode' );
 
 /**
  * Adresse d'un teaser retiré : redirection vers le projet dévoilé.
